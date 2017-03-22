@@ -1,6 +1,7 @@
 package heenan.runningapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,10 +19,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle(R.string.choose_race);
 
-        race_options_buttons = new Button[2];
+        race_options_buttons = new Button[5];
 
 
-        final int[] BUTTON_IDS = {R.id.chose_5k, R.id.chose_10k};
+        final int[] BUTTON_IDS = {R.id.chose_5k, R.id.chose_10k, R.id.chose_15k, R.id.chose_halfmarathon, R.id.chose_marathon};
 
         for (int i = 0; i < BUTTON_IDS.length; i++) {
             race_options_buttons[i] = (Button) findViewById(BUTTON_IDS[i]);
@@ -42,21 +43,47 @@ public class MainActivity extends AppCompatActivity {
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
 
+            Bundle b = new Bundle();
+            Intent i = new Intent(MainActivity.this, PlanOverview.class);
+
+
             switch (view.getId()) {
                 case R.id.chose_5k:
 
-                    text = "5k chosen!!";
-                    toast = Toast.makeText(context, text, duration);
-                    toast.show();
+
+                    b.putString("race_type",getString(R.string.race_5k));
+                    i.putExtras(b);
+                    startActivity(i);
+
                     break;
                 case R.id.chose_10k:
                     // do stuff
 
-
-                    text = "10k chosen!!";
-                    toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    b.putString("race_type",getString(R.string.race_10k));
+                    i.putExtras(b);
+                    startActivity(i);
                     break;
+                case R.id.chose_15k:
+
+                    b.putString("race_type",getString(R.string.race_15k));
+                    i.putExtras(b);
+                    startActivity(i);
+                    break;
+                case R.id.chose_halfmarathon:
+                    // do stuff
+                    b.putString("race_type",getString(R.string.race_halfmarathon));
+                    i.putExtras(b);
+                    startActivity(i);
+                    break;
+
+                case R.id.chose_marathon:
+                    // do stuff
+                    b.putString("race_type",getString(R.string.race_marathon));
+                    i.putExtras(b);
+                    startActivity(i);
+                    break;
+
+
 
             }
         }

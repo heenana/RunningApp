@@ -3,4 +3,10 @@
     <string name="choose_race">Choose Your Race</string>
     <string name="race_5k">5K Race</string>
     <string name="race_10k">10K Race</string>
+    <string name="race_15k">15K Race</string>
+    <string name="race_halfmarathon">Half-Marathon</string>
+    <string name="race_marathon">Marathon</string>
+
+    <string name="plan_overview_title">Plan Overview</string>
+
 </resources>

@@ -18,15 +18,33 @@
 
     <Button
         android:id="@+id/chose_5k"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/race_5k" />
 
     <Button
         android:id="@+id/chose_10k"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/race_10k" />
+
+    <Button
+        android:id="@+id/chose_15k"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/race_15k" />
+
+    <Button
+        android:id="@+id/chose_halfmarathon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/race_halfmarathon" />
+
+    <Button
+        android:id="@+id/chose_marathon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/race_marathon" />
 
 </LinearLayout>
 
