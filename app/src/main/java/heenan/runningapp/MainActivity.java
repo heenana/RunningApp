@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private Button race_options_buttons[];
+    private boolean[] days_progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,12 @@ public class MainActivity extends AppCompatActivity {
             switch (view.getId()) {
                 case R.id.chose_5k:
 
+                    days_progress = new boolean[] {true, false, false};
 
                     b.putString("race_type",getString(R.string.race_5k));
+                    b.putInt("days_total", 3);
+                    b.putBooleanArray("days_progress", days_progress);
+
                     i.putExtras(b);
                     startActivity(i);
 
@@ -59,7 +64,12 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.chose_10k:
                     // do stuff
 
+                   days_progress = new boolean[] {true, true, false, false, false};
+
                     b.putString("race_type",getString(R.string.race_10k));
+                    b.putInt("days_total", 5);
+                    b.putBooleanArray("days_progress", days_progress);
+
                     i.putExtras(b);
                     startActivity(i);
                     break;

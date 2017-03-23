@@ -8,5 +8,6 @@
     <string name="race_marathon">Marathon</string>
 
     <string name="plan_overview_title">Plan Overview</string>
+    <string name="day_overview_title">Day Overview</string>
 
 </resources>
