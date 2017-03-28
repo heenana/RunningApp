@@ -73,6 +73,7 @@ public class PlanOverview extends AppCompatActivity {
 
             Bundle b = new Bundle();
             Intent i = new Intent(PlanOverview.this, DayOverview.class);
+            //Intent i = new Intent(PlanOverview.this, DataReader.class);
 
             int pressed = view.getId();
 
