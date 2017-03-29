@@ -9,5 +9,9 @@
 
     <string name="plan_overview_title">Plan Overview</string>
     <string name="day_overview_title">Day Overview</string>
+    <string name="race_setup">Race Set Up</string>
+    <string name="week6">6</string>
+    <string name="week8">8</string>
+    <string name="week10">10</string>
 
 </resources>

@@ -22,6 +22,7 @@ import static android.R.interpolator.linear;
 public class PlanOverview extends AppCompatActivity {
 
     private int days_total;
+    private String raceLength;
     private boolean[] days_progress;
 
     @Override
@@ -30,30 +31,32 @@ public class PlanOverview extends AppCompatActivity {
         setContentView(R.layout.activity_plan_overview);
 
         Bundle b = getIntent().getExtras();
-        String race_type = b.getString("race_type");
 
+        raceLength = b.getString("raceLength");
 
-        setTitle(getString(R.string.plan_overview_title)+": "+ race_type);
-
-        days_total = b.getInt("days_total");
-        days_progress = b.getBooleanArray("days_progress");
+        setTitle(getString(R.string.plan_overview_title)+": "+ raceLength);
+        //Number of days shown in plan overview activity screen - hardcoded for now ****
+        days_total = Integer.parseInt(b.getString("weeks")) * 2; //Assumed 2 day per week
+        //Also hardcoded ****
+        days_progress = new boolean[] {true, true, true, false, false, false, false, false, false, false, false, false};
 
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.days_planoverview);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
+        //Created buttons for entire plan (30 days for now) ***
         for(int i=0;i< days_total;i++){
             Button myButton = new Button(this);
 
             myButton.setText("Day "+(i+1));
             Log.d("index", ""+i);
+            //Completed days are shown in green
             if(days_progress[i]) {
                 myButton.setBackgroundColor(Color.rgb(50, 168, 54));
             }
+            //Set listener for day button in order to go to next activity
             myButton.setId(i);
             myButton.setOnClickListener(new PlanOverview.ButtonClickListener());
             ll.addView(myButton, lp);
-
 
         }
 
