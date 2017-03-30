@@ -38,7 +38,7 @@ public class PlanOverview extends AppCompatActivity {
         //Number of days shown in plan overview activity screen - hardcoded for now ****
         days_total = Integer.parseInt(b.getString("weeks")) * 2; //Assumed 2 day per week
         //Also hardcoded ****
-        days_progress = new boolean[] {true, true, true, false, false, false, false, false, false, false, false, false};
+        days_progress = new boolean[days_total];
 
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.days_planoverview);

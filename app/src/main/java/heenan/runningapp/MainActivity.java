@@ -82,6 +82,13 @@ public class MainActivity extends AppCompatActivity {
             Bundle b = new Bundle();  //Used to pass parameters between activities
             Intent i = new Intent(MainActivity.this, CustomizePlan.class);
 
+            Log.e("DID I GET HERE","PLEASE");
+            DataReader testing_file = new DataReader();
+            Log.e("failed here", "hope not");
+            testing_file.readAllPlanMaster();
+//            testing_file.testmethod();
+
+
             switch (view.getId()) {
                 case R.id.chose_5k:
                     weeks = getWeekOptions(0);
@@ -106,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("Week 1", weeks[0]);
                     //Passing selected race to next activity CustomizePlan
                     b.putString("race_type",getString(R.string.race_10k));
+                    b.putStringArray("week_options", weeks);
 
 //                   days_progress = new boolean[] {true, true, false, false, false};
 //
@@ -116,11 +124,14 @@ public class MainActivity extends AppCompatActivity {
                     i.putExtras(b);
                     startActivity(i);
                     break;
+
                 case R.id.chose_15k:
                     weeks = getWeekOptions(6);
                     Log.e("Third week", weeks[2]);
                     //Passing selected race to next activity CustomizePlan
                     b.putString("race_type",getString(R.string.race_15k));
+                    b.putStringArray("week_options", weeks);
+
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -129,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("Week 1", weeks[0]);
                     //Passing selected race to next activity CustomizePlan
                     b.putString("race_type",getString(R.string.race_halfmarathon));
+                    b.putStringArray("week_options", weeks);
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -138,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("Week 1", weeks[0]);
                     //Passing selected race to next activity CustomizePlan
                     b.putString("race_type",getString(R.string.race_marathon));
+                    b.putStringArray("week_options", weeks);
                     i.putExtras(b);
                     startActivity(i);
                     break;
