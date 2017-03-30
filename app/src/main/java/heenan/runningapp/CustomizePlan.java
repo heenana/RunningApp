@@ -52,10 +52,9 @@ public class CustomizePlan extends AppCompatActivity {
 
 
 
+        Log.e("MaPVals 1:", Arrays.toString(refined_weekly_plans.toArray()));
 
-
-
-
+//        Log.e("MaPVals 2:", refined_weekly_plans.get(i);
 
 
         //3 options provided for each race type
@@ -65,6 +64,18 @@ public class CustomizePlan extends AppCompatActivity {
         //Assigning button listener for each button id
         for (int i = 0; i < BUTTON_IDS.length; i++) {
             race_week_buttons[i] = (Button) findViewById(BUTTON_IDS[i]);
+
+
+            String num_weeks = refined_weekly_plans.get(i).get("num_weeks")[0];
+
+            Log.e("MaPVals: "+i, num_weeks);
+
+
+
+//            Log.e("loop "+1, Arrays.toString(refined_weekly_plans.toArray()));
+
+            race_week_buttons[i].setText(num_weeks);
+
             race_week_buttons[i].setOnClickListener(new CustomizePlan.ButtonClickListener());
         }
     }
@@ -105,27 +116,44 @@ public class CustomizePlan extends AppCompatActivity {
             Bundle b = new Bundle();
             Intent i = new Intent(CustomizePlan.this, PlanOverview.class);
 
+
+            Map<String, String[]> week_data = new HashMap<String, String[]>();
+
             switch (view.getId()) {
                 case R.id.week_op1:
                     //Type of race and number of weeks
-                    b.putString("raceLength", raceLength);
-                    b.putString("weeks", getString(R.string.week6));
+
+                    week_data = refined_weekly_plans.get(0);
+
+                    b.putStringArray("race_name", week_data.get("race_name"));
+                    b.putStringArray("num_weeks", week_data.get("num_weeks"));
+                    b.putStringArray("weekly_sets", week_data.get("weekly_sets"));
+
                     i.putExtras(b);
                     startActivity(i);
 
                     break;
                 case R.id.week_op2:
 
-                    b.putString("raceLength", raceLength);
-                    b.putString("weeks", getString(R.string.week8));
+                    week_data = refined_weekly_plans.get(1);
+
+                    b.putStringArray("race_name", week_data.get("race_name"));
+                    b.putStringArray("num_weeks", week_data.get("num_weeks"));
+                    b.putStringArray("weekly_sets", week_data.get("weekly_sets"));
+
                     i.putExtras(b);
                     startActivity(i);
 
                     break;
                 case R.id.week_op3:
 
-                    b.putString("raceLength", raceLength);
-                    b.putString("weeks", getString(R.string.week10));
+
+                    week_data = refined_weekly_plans.get(2);
+
+                    b.putStringArray("race_name", week_data.get("race_name"));
+                    b.putStringArray("num_weeks", week_data.get("num_weeks"));
+                    b.putStringArray("weekly_sets", week_data.get("weekly_sets"));
+
                     i.putExtras(b);
                     startActivity(i);
 
