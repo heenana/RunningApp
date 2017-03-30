@@ -125,8 +125,10 @@ public class CustomizePlan extends AppCompatActivity {
 
                     week_data = refined_weekly_plans.get(0);
 
-                    b.putStringArray("race_name", week_data.get("race_name"));
-                    b.putStringArray("num_weeks", week_data.get("num_weeks"));
+
+
+                    b.putString("race_name", week_data.get("race_name")[0]);
+                    b.putString("num_weeks", week_data.get("num_weeks")[0]);
                     b.putStringArray("weekly_sets", week_data.get("weekly_sets"));
 
                     i.putExtras(b);
@@ -137,8 +139,8 @@ public class CustomizePlan extends AppCompatActivity {
 
                     week_data = refined_weekly_plans.get(1);
 
-                    b.putStringArray("race_name", week_data.get("race_name"));
-                    b.putStringArray("num_weeks", week_data.get("num_weeks"));
+                    b.putString("race_name", week_data.get("race_name")[0]);
+                    b.putString("num_weeks", week_data.get("num_weeks")[0]);
                     b.putStringArray("weekly_sets", week_data.get("weekly_sets"));
 
                     i.putExtras(b);
@@ -150,8 +152,8 @@ public class CustomizePlan extends AppCompatActivity {
 
                     week_data = refined_weekly_plans.get(2);
 
-                    b.putStringArray("race_name", week_data.get("race_name"));
-                    b.putStringArray("num_weeks", week_data.get("num_weeks"));
+                    b.putString("race_name", week_data.get("race_name")[0]);
+                    b.putString("num_weeks", week_data.get("num_weeks")[0]);
                     b.putStringArray("weekly_sets", week_data.get("weekly_sets"));
 
                     i.putExtras(b);

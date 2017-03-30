@@ -22,8 +22,10 @@ import static android.R.interpolator.linear;
 public class PlanOverview extends AppCompatActivity {
 
     private int days_total;
-    private String raceLength;
+    private int num_weeks;
+    private String race_name;
     private boolean[] days_progress;
+    private String[] weekly_sets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +34,18 @@ public class PlanOverview extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
 
-        raceLength = b.getString("raceLength");
+        race_name = b.getString("race_name");
+        num_weeks = Integer.parseInt(b.getString("num_weeks"));
 
-        setTitle(getString(R.string.plan_overview_title)+": "+ raceLength);
+        weekly_sets  = b.getStringArray("weekly_sets");
+
+        days_total = num_weeks * 2; //Assumed 2 day per week
+
+
+
+        setTitle(getString(R.string.plan_overview_title)+": "+ race_name +" - "+num_weeks+" Weeks");
         //Number of days shown in plan overview activity screen - hardcoded for now ****
-        days_total = Integer.parseInt(b.getString("weeks")) * 2; //Assumed 2 day per week
+
         //Also hardcoded ****
         days_progress = new boolean[days_total];
 
