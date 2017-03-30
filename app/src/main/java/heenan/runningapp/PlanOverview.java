@@ -2,6 +2,7 @@ package heenan.runningapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 import static android.R.interpolator.linear;
 
@@ -42,6 +51,7 @@ public class PlanOverview extends AppCompatActivity {
         days_total = num_weeks * 2; //Assumed 2 day per week
 
 
+        String filedata = file_plan_reaser();
 
         setTitle(getString(R.string.plan_overview_title)+": "+ race_name +" - "+num_weeks+" Weeks");
         //Number of days shown in plan overview activity screen - hardcoded for now ****
@@ -71,6 +81,38 @@ public class PlanOverview extends AppCompatActivity {
 
     }
 
+    private String file_plan_reaser(){
+        String filename = race_name+".txt";
+
+        String filedata = new String();
+
+
+        try {
+
+            FileInputStream fIn = openFileInput(filename);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fIn));
+
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+
+            reader.close();
+            filedata = sb.toString();
+            filedata = filedata.replace("\n", "").replace("\r", "");
+            fIn.close();
+
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        Log.e("FileSize", ""+filedata.length());
+        Log.e("FileData", filedata);
+
+        return filedata;
+    }
 
     // Handles clicks on the game board buttons
     private class ButtonClickListener implements View.OnClickListener {
