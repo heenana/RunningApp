@@ -9,6 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -51,7 +56,6 @@ public class CustomizePlan extends AppCompatActivity {
         setTitle(raceLength + " " + getString(R.string.race_setup));
 
 
-
         Log.e("MaPVals 1:", Arrays.toString(refined_weekly_plans.toArray()));
 
 //        Log.e("MaPVals 2:", refined_weekly_plans.get(i);
@@ -68,8 +72,7 @@ public class CustomizePlan extends AppCompatActivity {
 
             String num_weeks = refined_weekly_plans.get(i).get("num_weeks")[0];
 
-            Log.e("MaPVals: "+i, num_weeks);
-
+            Log.e("MaPVals: " + i, num_weeks);
 
 
 //            Log.e("loop "+1, Arrays.toString(refined_weekly_plans.toArray()));
@@ -84,7 +87,7 @@ public class CustomizePlan extends AppCompatActivity {
     // Methods in which takes the raw week options sxhedule string array
     // Workout Plans are then processed into an organized map
     // this returns three maps, one for each plan
-    private List<Map<String, String[]>> individual_plan_breaker(String[]week_options ) {
+    private List<Map<String, String[]>> individual_plan_breaker(String[] week_options) {
 
         List<Map<String, String[]>> all_processed_weeks = new ArrayList<Map<String, String[]>>();
 
@@ -94,7 +97,7 @@ public class CustomizePlan extends AppCompatActivity {
             HashMap<String, String[]> processed_week = new HashMap<String, String[]>();
 
             String data[] = week_options[week].split(";");
-            Log.e("Week "+week, Arrays.toString(data));
+            Log.e("Week " + week, Arrays.toString(data));
 
             processed_week.put("race_name", new String[]{data[0]});
             processed_week.put("num_weeks", new String[]{data[1]});
@@ -108,19 +111,16 @@ public class CustomizePlan extends AppCompatActivity {
     }
 
     // Method used to create a file for the custom plan
-    private String custom_plan_creator(int plan_number, int days_perweek){
-
-        Map<String, String[]> week_data = refined_weekly_plans.get(plan_number);
-
+    private String custom_plan_creator(Map<String, String[]> week_data, int days_perweek) {
 
         /**
          * PLAN OVERVIEW FORMAT
-                 RACE:
-                    {RACE_NAME,WEEKS_TOTAL,DAYS_TOTAL,DAYS_COMPLETED,[WEEK1],[WEEK2].... }
-                WEEK
-                    WEEK_NUMBER,DAYS_TOTAL,DAYS_COMPlETED,(DAY1),(DAY2),(DAY3)....]
-                DAY
-                    (DAY_NUMBER,COMPLETED,SETS_NUMBER,RUN_TIME,REST_TIME,COORDINATE_1,....COORDINATE_N)
+         RACE:
+         {RACE_NAME,WEEKS_TOTAL,DAYS_TOTAL,DAYS_COMPLETED,[WEEK1],[WEEK2].... }
+         WEEK
+         WEEK_NUMBER,DAYS_TOTAL,DAYS_COMPlETED,(DAY1),(DAY2),(DAY3)....]
+         DAY
+         (DAY_NUMBER,COMPLETED,SETS_NUMBER,RUN_TIME,REST_TIME,COORDINATE_1,....COORDINATE_N)
          *
          */
 
@@ -129,22 +129,24 @@ public class CustomizePlan extends AppCompatActivity {
         int days_total = num_weeks * days_perweek;
         String[] weekly_sets = week_data.get("weekly_sets");
 
+
+
         StringBuilder created_plan = new StringBuilder();
 
         //  {RACE_NAME,WEEKS_TOTAL,DAYS_TOTAL,DAYS_COMPLETED,
-        created_plan.append("{"+race_name+","+num_weeks+","+days_total+",0");
+        created_plan.append("{" + race_name + "," + num_weeks + "," + days_total + ",0");
 
-        for(int week = 0; week < num_weeks ; week++){
+        for (int week = 0; week < num_weeks; week++) {
 
             // WEEK_NUMBER,DAYS_TOTAL,DAYS_COMPlETED,
-            created_plan.append(",["+(week+1)+","+days_perweek+",0");
+            created_plan.append(",[" + (week + 1) + "," + days_perweek + ",0");
 
-            for(int day = 0; day < days_perweek ; day++){
+            for (int day = 0; day < days_perweek; day++) {
 
                 String[] set_data = weekly_sets[week].split(",");
 
                 //(DAY_NUMBER,COMPLETED,SETS_NUMBER,RUN_TIME,REST_TIME,COORDINATE_1,....COORDINATE_N)
-                created_plan.append(",("+(day+1)+",0,"+weekly_sets[week]+")");
+                created_plan.append(",(" + (day + 1) + ",0," + weekly_sets[week] + ")");
             }
 
             created_plan.append("]");
@@ -154,9 +156,68 @@ public class CustomizePlan extends AppCompatActivity {
 
         String final_created_plan = created_plan.toString();
 
-        Log.e("FINAL PLAN",final_created_plan);
+        Log.e("FINAL PLAN", final_created_plan);
 
         return final_created_plan;
+
+    }
+
+
+    // method creates a file (filename.text) that contains filedata (customized_plan)
+    private void file_creator_custom_plan(String filename, String filedata) {
+        //Writing a file...
+
+
+        try {
+            // catches IOException below
+            final String TESTSTRING = new String(filedata);
+
+       /* We have to use the openFileOutput()-method
+       * the ActivityContext provides, to
+       * protect your file from others and
+       * This is done for security-reasons.
+       * We chose MODE_WORLD_READABLE, because
+       *  we have nothing to hide in our file */
+            FileOutputStream fOut = openFileOutput(filename,
+                    MODE_WORLD_READABLE);
+            OutputStreamWriter osw = new OutputStreamWriter(fOut);
+
+            // Write the string to the file
+            osw.write(TESTSTRING);
+
+       /* ensure that everything is
+        * really written out and close */
+            osw.flush();
+            osw.close();
+
+    //Reading the file back...
+
+       /* We have to use the openFileInput()-method
+        * the ActivityContext provides.
+        * Again for security reasons with
+        * openFileInput(...) */
+
+            FileInputStream fIn = openFileInput(filename);
+            InputStreamReader isr = new InputStreamReader(fIn);
+
+        /* Prepare a char-Array that will
+         * hold the chars we read back in. */
+            char[] inputBuffer = new char[TESTSTRING.length()];
+
+            // Fill the Buffer with data from the file
+            isr.read(inputBuffer);
+
+            // Transform the chars to a String
+            String readString = new String(inputBuffer);
+
+            // Check if we read back the same chars that we had written out
+            boolean isTheSame = TESTSTRING.equals(readString);
+
+            Log.i("File Reading stuff", "success = " + isTheSame);
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
 
     }
 
@@ -167,6 +228,9 @@ public class CustomizePlan extends AppCompatActivity {
 
             Bundle b = new Bundle();
             Intent i = new Intent(CustomizePlan.this, PlanOverview.class);
+            String created_plan_data = new String();
+            String filename = new String();
+
 
 
             Map<String, String[]> week_data = new HashMap<String, String[]>();
@@ -175,10 +239,12 @@ public class CustomizePlan extends AppCompatActivity {
                 case R.id.week_op1:
                     //Type of race and number of weeks
 
-                    custom_plan_creator(0,2);
 
                     week_data = refined_weekly_plans.get(0);
 
+                    created_plan_data = custom_plan_creator(week_data, 2);
+                    filename = week_data.get("race_name")[0]+".txt";
+                    file_creator_custom_plan(filename, created_plan_data);
 
 
                     b.putString("race_name", week_data.get("race_name")[0]);
@@ -192,6 +258,9 @@ public class CustomizePlan extends AppCompatActivity {
                 case R.id.week_op2:
 
                     week_data = refined_weekly_plans.get(1);
+                    created_plan_data = custom_plan_creator(week_data, 2);
+                    filename = week_data.get("race_name")[0]+".txt";
+                    file_creator_custom_plan(filename, created_plan_data);
 
                     b.putString("race_name", week_data.get("race_name")[0]);
                     b.putString("num_weeks", week_data.get("num_weeks")[0]);
@@ -203,8 +272,10 @@ public class CustomizePlan extends AppCompatActivity {
                     break;
                 case R.id.week_op3:
 
-
                     week_data = refined_weekly_plans.get(2);
+                    created_plan_data = custom_plan_creator(week_data, 3);
+                    filename = week_data.get("race_name")[0]+".txt";
+                    file_creator_custom_plan(filename, created_plan_data);
 
                     b.putString("race_name", week_data.get("race_name")[0]);
                     b.putString("num_weeks", week_data.get("num_weeks")[0]);
