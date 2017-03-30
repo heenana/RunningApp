@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static android.R.interpolator.linear;
 
@@ -52,6 +55,7 @@ public class PlanOverview extends AppCompatActivity {
 
 
         String filedata = file_plan_reaser();
+        file_data_organizer(filedata);
 
         setTitle(getString(R.string.plan_overview_title)+": "+ race_name +" - "+num_weeks+" Weeks");
         //Number of days shown in plan overview activity screen - hardcoded for now ****
@@ -81,11 +85,12 @@ public class PlanOverview extends AppCompatActivity {
 
     }
 
+    // this methood uses the race_name to access and read the
+    // custumized created schedule plan file
     private String file_plan_reaser(){
         String filename = race_name+".txt";
 
         String filedata = new String();
-
 
         try {
 
@@ -114,9 +119,37 @@ public class PlanOverview extends AppCompatActivity {
         return filedata;
     }
 
+    // this method takes in the filedata from race_name.txt and
+    // processes the string in otder to create a map with organized data
+    private Map<String, String> file_data_organizer(String filedata){
+        Map<String, String> processed_data = new TreeMap<String, String>();
+
+        String[] initial_arr = filedata.split(";");
+
+        processed_data.put("race_name", initial_arr[0]);
+        processed_data.put("num_weeks", initial_arr[1]);
+        processed_data.put("days_total", initial_arr[2]);
+        processed_data.put("days_completed", initial_arr[3]);
+
+        Log.e("HERE --- ", initial_arr[4]);
+
+        String[] all_weeks_data = initial_arr[4].split("\\[");
+
+        for(int week = 1; week < all_weeks_data.length; week++){
+
+            String[] single_week_data = all_weeks_data[week].split("\\(");
+            processed_data.put("week"+week, single_week_data[0].substring(0,single_week_data[0].length() -1));
+
+            for(int day = 1; day < single_week_data.length; day++){
+                processed_data.put("week"+week+"day"+day, single_week_data[day]);
+            }
+        }
+
+        return processed_data;
+    }
+
     // Handles clicks on the game board buttons
     private class ButtonClickListener implements View.OnClickListener {
-
 
         public void onClick(View view) {
 

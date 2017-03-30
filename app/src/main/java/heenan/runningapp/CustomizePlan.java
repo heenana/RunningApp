@@ -116,11 +116,11 @@ public class CustomizePlan extends AppCompatActivity {
         /**
          * PLAN OVERVIEW FORMAT
          RACE:
-         {RACE_NAME,WEEKS_TOTAL,DAYS_TOTAL,DAYS_COMPLETED,[WEEK1],[WEEK2].... }
+         RACE_NAME;WEEKS_TOTAL;DAYS_TOTAL;DAYS_COMPLETED;[WEEK1[WEEK2
          WEEK
-         WEEK_NUMBER,DAYS_TOTAL,DAYS_COMPlETED,(DAY1),(DAY2),(DAY3)....]
+         [WEEK_NUMBER:DAYS_TOTAL:DAYS_COMPlETED:(DAY1(DAY2)DAY3)....
          DAY
-         (DAY_NUMBER,COMPLETED,SETS_NUMBER,RUN_TIME,REST_TIME,COORDINATE_1,....COORDINATE_N)
+         (DAY_NUMBER,COMPLETED,SETS_NUMBER,RUN_TIME,REST_TIME,COORDINATE_1,....COORDINATE_N
          *
          */
 
@@ -134,25 +134,22 @@ public class CustomizePlan extends AppCompatActivity {
         StringBuilder created_plan = new StringBuilder();
 
         //  {RACE_NAME,WEEKS_TOTAL,DAYS_TOTAL,DAYS_COMPLETED,
-        created_plan.append("{" + race_name + "," + num_weeks + "," + days_total + ",0");
+        created_plan.append(race_name + ";" + num_weeks + ";" + days_total + ";0;");
 
         for (int week = 0; week < num_weeks; week++) {
 
             // WEEK_NUMBER,DAYS_TOTAL,DAYS_COMPlETED,
-            created_plan.append(",[" + (week + 1) + "," + days_perweek + ",0");
+            created_plan.append("[" + (week + 1) + ":" + days_perweek + ":0:");
 
             for (int day = 0; day < days_perweek; day++) {
 
                 String[] set_data = weekly_sets[week].split(",");
 
                 //(DAY_NUMBER,COMPLETED,SETS_NUMBER,RUN_TIME,REST_TIME,COORDINATE_1,....COORDINATE_N)
-                created_plan.append(",(" + (day + 1) + ",0," + weekly_sets[week] + ")");
+                created_plan.append("(" + (day + 1) + ",0," + weekly_sets[week]);
             }
 
-            created_plan.append("]");
         }
-
-        created_plan.append("}");
 
         String final_created_plan = created_plan.toString();
 
