@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -37,7 +38,7 @@ public class PlanOverview extends AppCompatActivity {
     private int num_weeks;
     private String race_name;
     private boolean[] days_progress;
-    private String[] weekly_sets;
+    private Map<String, String> trainning_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,21 +48,19 @@ public class PlanOverview extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
 
         race_name = b.getString("race_name");
-        num_weeks = Integer.parseInt(b.getString("num_weeks"));
 
-        weekly_sets  = b.getStringArray("weekly_sets");
-
-        days_total = num_weeks * 2; //Assumed 2 day per week
 
 
         String filedata = file_plan_reaser();
-        file_data_organizer(filedata);
+        trainning_data = file_data_organizer(filedata);
+        num_weeks = Integer.parseInt(trainning_data.get("num_weeks"));
+        days_total = Integer.parseInt(trainning_data.get("days_total"));
+        days_progress = new boolean[days_total];
+
 
         setTitle(getString(R.string.plan_overview_title)+": "+ race_name +" - "+num_weeks+" Weeks");
         //Number of days shown in plan overview activity screen - hardcoded for now ****
 
-        //Also hardcoded ****
-        days_progress = new boolean[days_total];
 
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.days_planoverview);
@@ -134,6 +133,11 @@ public class PlanOverview extends AppCompatActivity {
         Log.e("HERE --- ", initial_arr[4]);
 
         String[] all_weeks_data = initial_arr[4].split("\\[");
+
+        // create string of 0000s correspondoing to daystotal size
+        String progress_days = new String(new char[Integer.parseInt(processed_data.get("days_total"))]).replace("\0", "0");
+
+        processed_data.put("days_progress", progress_days);
 
         for(int week = 1; week < all_weeks_data.length; week++){
 
