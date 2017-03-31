@@ -32,14 +32,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".DataReader">
+
+        <activity android:name=".CustomizePlan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
             </intent-filter>
         </activity>
 
-        <activity android:name=".CustomizePlan">
+
+        <activity android:name=".DuringWorkout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

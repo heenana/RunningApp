@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_day_overview"
+    android:id="@+id/activity_during_workout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="@string/day_overview_title"
+            android:text="Inside Running stuff"
             />
 
         <TextView
@@ -56,12 +56,6 @@
             android:text="@string/race_5k"
             />
 
-        <Button
-            android:id="@+id/begin_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="BEGIN WORKOUT!"
-            android:background="#66ff66" />
 
 
     </LinearLayout>

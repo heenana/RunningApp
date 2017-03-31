@@ -137,6 +137,11 @@ public class PlanOverview extends AppCompatActivity {
         // create string of 0000s correspondoing to daystotal size
         String progress_days = new String(new char[Integer.parseInt(processed_data.get("days_total"))]).replace("\0", "0");
 
+
+
+        int days_perweek = Integer.parseInt(processed_data.get("days_total")) / Integer.parseInt(processed_data.get("num_weeks"));
+        Log.e("DAYS PER WEEK", ""+days_perweek);
+
         processed_data.put("days_progress", progress_days);
 
         for(int week = 1; week < all_weeks_data.length; week++){
@@ -145,7 +150,9 @@ public class PlanOverview extends AppCompatActivity {
             processed_data.put("week"+week, single_week_data[0].substring(0,single_week_data[0].length() -1));
 
             for(int day = 1; day < single_week_data.length; day++){
-                processed_data.put("week"+week+"day"+day, single_week_data[day]);
+                int current_day = ((week - 1) * days_perweek) + day;
+                Log.e("CURRENTDAY", ""+current_day);
+                processed_data.put(""+current_day, single_week_data[day]);
             }
         }
 
@@ -168,9 +175,18 @@ public class PlanOverview extends AppCompatActivity {
 
             int pressed = view.getId();
 
+
+
+            String day_data = trainning_data.get(""+(pressed+1));
+
+
+
+
             String completed = days_progress[pressed] ? "Completed" : "To-Do";
+
             b.putString("completed", completed);
             b.putInt("day_number", (pressed+1));
+            b.putString("day_data", day_data);
 
             i.putExtras(b);
             startActivity(i);
