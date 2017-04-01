@@ -81,11 +81,7 @@ public class DuringWorkout  extends AppCompatActivity {
             Log.e("Looping sets", ""+sets);
             sets++;
         }
-
-
-
     }
-
 
     private class Timer extends CountDownTimer{
 
@@ -96,12 +92,15 @@ public class DuringWorkout  extends AppCompatActivity {
          * @param countDownInterval The interval along the way to receive
          *                          {@link #onTick(long)} callbacks.
          */
+
         public Timer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
+
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
+
 
             long second = (millisUntilFinished / 1000) % 60;
             long minute = (millisUntilFinished / (1000 * 60)) % 60;
@@ -116,7 +115,6 @@ public class DuringWorkout  extends AppCompatActivity {
         @Override
         public void onFinish() {
             timer_views[0].setText("Done!");
-
         }
     }
 
