@@ -17,6 +17,8 @@ import android.widget.TextView;
 public class DayOverview extends AppCompatActivity {
 
     private Button race_week_buttons[];
+    private String[] day_data;
+    private double length;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +29,11 @@ public class DayOverview extends AppCompatActivity {
 
         int day_number = b.getInt("day_number");
         String completed = b.getString("completed");
-        String day_data[] = b.getString("day_data").split(",");
+        day_data = b.getString("day_data").split(",");
         String sets = day_data[2];
         String run = day_data[3];
         String walk = day_data[4];
-        int length = (Integer.parseInt(walk) + Integer.parseInt(run)) * Integer.parseInt(sets) + 10;
+        length = (Double.parseDouble(walk) + Double.parseDouble(run)) * Double.parseDouble(sets) + 10;
 
         setTitle(getString(R.string.day_overview_title) + " " + day_number + ": " + completed);
 
@@ -43,7 +45,7 @@ public class DayOverview extends AppCompatActivity {
 
         running.setText("Run: " + run + " minutes");
         walking.setText("Walk: " + walk + " minutes");
-        sets_num.setText("Sets: " + sets + " minutes");
+        sets_num.setText("Sets: " + sets);
         total_length.setText("Total Workout Time: " + length + " minutes");
 
         //3 options provided for each race type
@@ -73,6 +75,8 @@ public class DayOverview extends AppCompatActivity {
                 case R.id.begin_button:
                     //Type of race and number of weeks
 
+                    b.putStringArray("day_data", day_data);
+                    b.putDouble("length", length);
 
                     i.putExtras(b);
                     startActivity(i);

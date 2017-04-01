@@ -20,11 +20,63 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/title_time_until_next_instruction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="Inside Running stuff"
+            android:text="Time Until Next Instruction"
+            />
+
+        <TextView
+            android:id="@+id/timer_current_instruction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="@string/race_5k"
+            />
+
+        <TextView
+            android:id="@+id/title_instruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Instruction"
+            />
+
+        <TextView
+            android:id="@+id/current_instruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="@string/race_5k"
+            />
+
+        <TextView
+            android:id="@+id/title_time_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Total Time Left"
+            />
+
+        <TextView
+            android:id="@+id/time_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="@string/race_5k"
+            />
+
+        <TextView
+            android:id="@+id/instructions_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Overview"
             />
 
         <TextView
