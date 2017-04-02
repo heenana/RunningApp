@@ -3,8 +3,11 @@ package heenan.runningapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -29,6 +32,9 @@ public class CustomizePlan extends AppCompatActivity {
 
     private Button race_week_buttons[];
     private boolean[] days_progress;
+    //For navigation menu
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
 
     // List that holds 3 maps, one for each week plan. Each map contains
@@ -45,6 +51,13 @@ public class CustomizePlan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customize_plan);
 
+        //To see navigation bar at top
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_customize_plan);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle b = getIntent().getExtras();
         //Type of race selected
@@ -81,6 +94,16 @@ public class CustomizePlan extends AppCompatActivity {
 
             race_week_buttons[i].setOnClickListener(new CustomizePlan.ButtonClickListener());
         }
+    }
+
+    //Used if any option on action bar is clicked on
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 
 

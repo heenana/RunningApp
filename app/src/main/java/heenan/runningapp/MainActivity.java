@@ -3,9 +3,12 @@ package heenan.runningapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     private Button race_options_buttons[];
     private boolean[] days_progress; //Hard coded completed and not completed for now****
     public String[] weeks;
+    //For navigation menu
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
 
     @Override
@@ -25,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle(R.string.choose_race);
 
+        //To see navigation bar at top
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_main);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         race_options_buttons = new Button[5];
 
@@ -34,6 +47,16 @@ public class MainActivity extends AppCompatActivity {
             race_options_buttons[i] = (Button) findViewById(BUTTON_IDS[i]);
             race_options_buttons[i].setOnClickListener(new ButtonClickListener());
         }
+
+    }
+
+    //Used if any option on action bar is clicked on
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
 
     }
 

@@ -2,8 +2,11 @@ package heenan.runningapp;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -17,12 +20,23 @@ public class DuringWorkout  extends AppCompatActivity {
     private TextView[] timer_views;
     private double[] day_data;
     private double length;
+    //For navigation menu
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_during_workout);
+
+        //To see navigation bar at top
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_during_workout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle b = getIntent().getExtras();
 
@@ -58,6 +72,16 @@ public class DuringWorkout  extends AppCompatActivity {
 
         timer_updater();
 
+
+    }
+
+    //Used if any option on action bar is clicked on
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
 
     }
 

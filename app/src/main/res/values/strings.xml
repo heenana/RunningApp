@@ -14,4 +14,7 @@
     <string name="week8">8</string>
     <string name="week10">10</string>
 
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
 </resources>
