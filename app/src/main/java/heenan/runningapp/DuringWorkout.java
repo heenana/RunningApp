@@ -37,6 +37,7 @@ public class DuringWorkout  extends AppCompatActivity {
     int runWalkSwitch; //(run - 0) --- (walk - 1
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +106,7 @@ public class DuringWorkout  extends AppCompatActivity {
         // Get instance of Vibrator from current Context
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
+
         //If you have yet to reach the final task, move onto the next task
         if(task != totalTasks){
             time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
@@ -152,9 +154,12 @@ public class DuringWorkout  extends AppCompatActivity {
 
         @Override
         public void onFinish() {
+            // Get instance of Vibrator from current Context
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             //If you have yet to reach the final task, move onto the next task
             if(task != totalTasks) {
                 time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
+                v.vibrate(1000);
                 //Create new timer and use time_left
                 Timer next_instruction_timer = new Timer(time_left, 1000);
                 next_instruction_timer.start();
