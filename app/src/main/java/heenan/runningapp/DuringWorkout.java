@@ -114,6 +114,9 @@ public class DuringWorkout  extends AppCompatActivity {
             instruction.setText("Walk!");
         }
 
+        TimerLeft timerLeft = new TimerLeft((long)length*60000,1000);
+        timerLeft.start();
+
         //If you have yet to reach the final task, move onto the next task
         if(task != totalTasks){
             time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
@@ -130,6 +133,37 @@ public class DuringWorkout  extends AppCompatActivity {
             task = task + 1;
         }
     }
+
+    //This class is for the time remaining timer
+    private class TimerLeft extends CountDownTimer{
+        /**
+         * @param millisInFuture    The number of millis in the future from the call
+         *                          to {@link #start()} until the countdown is done and {@link #onFinish()}
+         *                          is called.
+         * @param countDownInterval The interval along the way to receive
+         *                          {@link #onTick(long)} callbacks.
+         */
+        public TimerLeft(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            long second = (millisUntilFinished / 1000) % 60;
+            long minute = (millisUntilFinished / (1000 * 60)) % 60;
+            long hour = (millisUntilFinished / (1000 * 60 * 60)) % 24;
+
+            String time = String.format("%02d:%02d:%02d", hour, minute, second);
+
+            timer_views[2].setText(time);
+        }
+
+        @Override
+        public void onFinish() {
+            timer_views[2].setText("Done! You did a great job today!");
+        }
+    }
+
 
     private class Timer extends CountDownTimer{
 
