@@ -1,6 +1,8 @@
 package heenan.runningapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
@@ -222,6 +224,12 @@ public class DuringWorkout  extends AppCompatActivity {
                 task = task + 1;
             } else {
                 timer_views[0].setText("Done! You did a great job today!");
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result", 1);
+
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();
             }
         }
     }

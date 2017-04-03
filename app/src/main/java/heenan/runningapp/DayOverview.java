@@ -1,5 +1,6 @@
 package heenan.runningapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ public class DayOverview extends AppCompatActivity {
     private Button race_week_buttons[];
     private String[] day_data;
     private double length;
+    private int day_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class DayOverview extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
 
-        int day_number = b.getInt("day_number");
+        day_number = b.getInt("day_number");
         String completed = b.getString("completed");
         day_data = b.getString("day_data").split(",");
         String sets = day_data[2];
@@ -104,12 +106,32 @@ public class DayOverview extends AppCompatActivity {
                     b.putDouble("length", length);
 
                     i.putExtras(b);
-                    startActivity(i);
+                    startActivityForResult(i, 1);
 
                     break;
             }
         }
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.e("do i get here?", "plz");
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("day_completed", day_number);
+
+                setResult(Activity.RESULT_OK,returnIntent);
+
+                Log.e("go to plan overview", "plz");
+                finish();
+
+            }
+
+        }
     }
 }
