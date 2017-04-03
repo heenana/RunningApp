@@ -34,7 +34,7 @@ public class DuringWorkout  extends AppCompatActivity {
     long time_left; //How much time needed left for the timer
     int task; //Current task number you are at
     double totalTasks; //Total tasks to be completed (sets * 2)
-    int runWalkSwitch; //(run - 0) --- (walk - 1
+    int runWalkSwitch; //(run - 0) --- (walk - 1)
 
 
 
