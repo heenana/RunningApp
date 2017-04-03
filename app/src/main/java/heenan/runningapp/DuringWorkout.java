@@ -105,7 +105,14 @@ public class DuringWorkout  extends AppCompatActivity {
         runWalkSwitch = 0; //(run - 0) -- (walk - 1)
         // Get instance of Vibrator from current Context
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        TextView instruction = (TextView) findViewById(R.id.current_instruction);
 
+        //Set the current instruction
+        if(runWalkSwitch == 0){
+            instruction.setText("Run!");
+        } else {
+            instruction.setText("Walk!");
+        }
 
         //If you have yet to reach the final task, move onto the next task
         if(task != totalTasks){
@@ -156,6 +163,15 @@ public class DuringWorkout  extends AppCompatActivity {
         public void onFinish() {
             // Get instance of Vibrator from current Context
             Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            TextView instruction = (TextView) findViewById(R.id.current_instruction);
+
+            //Set the current instruction
+            if(runWalkSwitch == 0){
+                instruction.setText("Run!");
+            } else {
+                instruction.setText("Walk!");
+            }
+
             //If you have yet to reach the final task, move onto the next task
             if(task != totalTasks) {
                 time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
