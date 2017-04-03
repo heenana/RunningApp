@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.concurrent.CountDownLatch;
+
+import static java.lang.Thread.sleep;
+
 /**
  * Created by gotal on 3/31/2017.
  */
@@ -23,6 +27,12 @@ public class DuringWorkout  extends AppCompatActivity {
     //For navigation menu
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+
+    //Variables that are used with the timer
+    long time_left; //How much time needed left for the timer
+    int task; //Current task number you are at
+    double totalTasks; //Total tasks to be completed (sets * 2)
+    int runWalkSwitch; //(run - 0) --- (walk - 1
 
 
     @Override
@@ -87,23 +97,23 @@ public class DuringWorkout  extends AppCompatActivity {
 
     private void timer_updater(){
 
-        int sets = 0;
+        task = 0; //Current task number you are at
+        totalTasks = day_data[2] * 2; //Total tasks to be completed (sets * 2)
+        runWalkSwitch = 0; //(run - 0) --- (walk - 1)
 
-
-        while(sets != day_data[2]){
-
-            for(int rw = 0; rw < 2; rw++){
-
-                long time_left = (long) ((day_data[3 + rw] * 60000));
-
-                Timer next_instruction_timer = new Timer(time_left, 1000);
-                next_instruction_timer.start();
-
-                Log.e("Do I GET HERE?!?!?!?", ""+rw);
+        //If you have yet to reach the final task, move onto the next task
+        if(task != totalTasks){
+            time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
+            //Create new timer and use time_left
+            Timer next_instruction_timer = new Timer(time_left, 1000);
+            next_instruction_timer.start();
+            //Update the switch so you can correctly access the running or walking time
+            if(runWalkSwitch == 0){
+                runWalkSwitch = 1; //Walk
+            } else {
+                runWalkSwitch = 0; //Run
             }
-
-            Log.e("Looping sets", ""+sets);
-            sets++;
+            task = task + 1;
         }
     }
 
@@ -125,7 +135,6 @@ public class DuringWorkout  extends AppCompatActivity {
         @Override
         public void onTick(long millisUntilFinished) {
 
-
             long second = (millisUntilFinished / 1000) % 60;
             long minute = (millisUntilFinished / (1000 * 60)) % 60;
             long hour = (millisUntilFinished / (1000 * 60 * 60)) % 24;
@@ -138,7 +147,22 @@ public class DuringWorkout  extends AppCompatActivity {
 
         @Override
         public void onFinish() {
-            timer_views[0].setText("Done!");
+            //If you have yet to reach the final task, move onto the next task
+            if(task != totalTasks) {
+                time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
+                //Create new timer and use time_left
+                Timer next_instruction_timer = new Timer(time_left, 1000);
+                next_instruction_timer.start();
+                //Update the switch so you can correctly access the running or walking time
+                if(runWalkSwitch == 0){
+                    runWalkSwitch = 1; //Walk
+                } else {
+                    runWalkSwitch = 0; //Run
+                }
+                task = task + 1;
+            } else {
+                timer_views[0].setText("Done! You did a great job today!");
+            }
         }
     }
 
