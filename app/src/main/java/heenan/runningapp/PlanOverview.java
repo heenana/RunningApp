@@ -63,8 +63,6 @@ public class PlanOverview extends AppCompatActivity {
 
         race_name = b.getString("race_name");
 
-
-
         String filedata = file_plan_reader();
         trainning_data = file_data_organizer(filedata);
         num_weeks = Integer.parseInt(trainning_data.get("num_weeks"));
@@ -202,22 +200,19 @@ public class PlanOverview extends AppCompatActivity {
             int pressed = view.getId();
 
             String day_data = trainning_data.get(""+(pressed+1));
-
-            if(days_progress[pressed]){
-                i = new Intent(PlanOverview.this, DayOverviewCompleted.class);
-            }
             String completed = days_progress[pressed] ? "Completed" : "To-Do";
-
-
 
             b.putString("completed", completed);
             b.putInt("day_number", (pressed+1));
             b.putString("day_data", day_data);
 
-            i.putExtras(b);
-            startActivity(i);
-
-
+            if(days_progress[pressed]){
+                i = new Intent(PlanOverview.this, DayOverviewCompleted.class);
+                startActivity(i);
+            } else {
+                i.putExtras(b);
+                startActivityForResult(i, 1);
+            }
         }
     }
 
@@ -304,6 +299,24 @@ public class PlanOverview extends AppCompatActivity {
             ioe.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.e("PO: do i get here?", "plz");
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+
+                Bundle b = data.getExtras();
+
+                int day_completed = data.getIntExtra("day_completed", 0);
+
+                Log.e("HERE-----", ""+day_completed);
+
+            }
+
+        }
     }
 
 
