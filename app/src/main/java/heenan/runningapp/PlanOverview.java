@@ -96,6 +96,8 @@ public class PlanOverview extends AppCompatActivity {
 
         }
 
+        Log.e("TESTINGWRITER", map_to_string_converter());
+
     }
 
     //Used if any option on action bar is clicked on
@@ -199,12 +201,7 @@ public class PlanOverview extends AppCompatActivity {
 
             int pressed = view.getId();
 
-
-
             String day_data = trainning_data.get(""+(pressed+1));
-
-
-
 
             String completed = days_progress[pressed] ? "Completed" : "To-Do";
 
@@ -219,7 +216,90 @@ public class PlanOverview extends AppCompatActivity {
         }
     }
 
+    // method takes a training_data map and converts it into a string
+    // this string will them be used to write a new file with
+    // the  method file_updater_custom_plan
+    private String map_to_string_converter(){
 
+        StringBuilder file = new StringBuilder();
+        file.append(race_name+";"+num_weeks+";"+days_total+";"+trainning_data.get("days_completed")+";");
+
+        int curr_day = 1;
+
+        for(int week = 1; week <= num_weeks; week++){
+            file.append("["+trainning_data.get("week"+week)+":");
+
+            int days_pw = days_total/num_weeks;
+
+            while(curr_day <= days_total && days_pw > 0){
+                file.append("("+trainning_data.get(""+curr_day));
+                days_pw--;
+                curr_day++;
+            }
+
+        }
+
+        return file.toString();
+    }
+
+
+    // method creates a file (filename.text) that contains filedata (customized_plan)
+    private void file_updater_custom_plan(String filename, String filedata) {
+        //Writing a file...
+
+
+        try {
+            // catches IOException below
+            final String TESTSTRING = new String(filedata);
+
+       /* We have to use the openFileOutput()-method
+       * the ActivityContext provides, to
+       * protect your file from others and
+       * This is done for security-reasons.
+       * We chose MODE_WORLD_READABLE, because
+       *  we have nothing to hide in our file */
+            FileOutputStream fOut = openFileOutput(filename,
+                    MODE_WORLD_READABLE);
+            OutputStreamWriter osw = new OutputStreamWriter(fOut);
+
+            // Write the string to the file
+            osw.write(TESTSTRING);
+
+       /* ensure that everything is
+        * really written out and close */
+            osw.flush();
+            osw.close();
+
+            //Reading the file back...
+
+       /* We have to use the openFileInput()-method
+        * the ActivityContext provides.
+        * Again for security reasons with
+        * openFileInput(...) */
+
+            FileInputStream fIn = openFileInput(filename);
+            InputStreamReader isr = new InputStreamReader(fIn);
+
+        /* Prepare a char-Array that will
+         * hold the chars we read back in. */
+            char[] inputBuffer = new char[TESTSTRING.length()];
+
+            // Fill the Buffer with data from the file
+            isr.read(inputBuffer);
+
+            // Transform the chars to a String
+            String readString = new String(inputBuffer);
+
+            // Check if we read back the same chars that we had written out
+            boolean isTheSame = TESTSTRING.equals(readString);
+
+            Log.i("File Reading stuff", "success = " + isTheSame);
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+    }
 
 
 
