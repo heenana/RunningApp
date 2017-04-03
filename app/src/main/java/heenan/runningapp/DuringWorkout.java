@@ -67,8 +67,8 @@ public class DuringWorkout  extends AppCompatActivity {
 
         running.setText("Run: " + run + " minutes");
         walking.setText("Walk: " + walk + " minutes");
-        sets_num.setText("Sets: " + sets);
-        total_length.setText("Total Workout Time: " + length + " minutes");
+        sets_num.setText("Sets: " + (int) sets);
+        total_length.setText("Total Workout Time: " + (int) length + " minutes");
 
         timer_updater();
 

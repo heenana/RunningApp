@@ -61,7 +61,7 @@ public class DayOverview extends AppCompatActivity {
         running.setText("Run: " + run + " minutes");
         walking.setText("Walk: " + walk + " minutes");
         sets_num.setText("Sets: " + sets);
-        total_length.setText("Total Workout Time: " + length + " minutes");
+        total_length.setText("Total Workout Time: " + (int) length + " minutes");
 
         //3 options provided for each race type
         race_week_buttons = new Button[1];
