@@ -48,7 +48,7 @@ public class DayOverview extends AppCompatActivity {
         String sets = day_data[2];
         String run = day_data[3];
         String walk = day_data[4];
-        length = (Double.parseDouble(walk) + Double.parseDouble(run)) * Double.parseDouble(sets) + 10;
+        length = (Double.parseDouble(walk) + Double.parseDouble(run)) * Double.parseDouble(sets);
 
         setTitle(getString(R.string.day_overview_title) + " " + day_number + ": " + completed);
 
