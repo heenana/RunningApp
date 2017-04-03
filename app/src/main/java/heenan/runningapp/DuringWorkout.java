@@ -99,7 +99,7 @@ public class DuringWorkout  extends AppCompatActivity {
 
         task = 0; //Current task number you are at
         totalTasks = day_data[2] * 2; //Total tasks to be completed (sets * 2)
-        runWalkSwitch = 0; //(run - 0) --- (walk - 1)
+        runWalkSwitch = 0; //(run - 0) -- (walk - 1)
 
         //If you have yet to reach the final task, move onto the next task
         if(task != totalTasks){
