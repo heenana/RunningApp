@@ -1,7 +1,9 @@
 package heenan.runningapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +35,7 @@ public class DuringWorkout  extends AppCompatActivity {
     int task; //Current task number you are at
     double totalTasks; //Total tasks to be completed (sets * 2)
     int runWalkSwitch; //(run - 0) --- (walk - 1
+
 
 
     @Override
@@ -100,10 +103,14 @@ public class DuringWorkout  extends AppCompatActivity {
         task = 0; //Current task number you are at
         totalTasks = day_data[2] * 2; //Total tasks to be completed (sets * 2)
         runWalkSwitch = 0; //(run - 0) -- (walk - 1)
+        // Get instance of Vibrator from current Context
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
 
         //If you have yet to reach the final task, move onto the next task
         if(task != totalTasks){
             time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
+            v.vibrate(1000);
             //Create new timer and use time_left
             Timer next_instruction_timer = new Timer(time_left, 1000);
             next_instruction_timer.start();
@@ -147,9 +154,12 @@ public class DuringWorkout  extends AppCompatActivity {
 
         @Override
         public void onFinish() {
+            // Get instance of Vibrator from current Context
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             //If you have yet to reach the final task, move onto the next task
             if(task != totalTasks) {
                 time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
+                v.vibrate(1000);
                 //Create new timer and use time_left
                 Timer next_instruction_timer = new Timer(time_left, 1000);
                 next_instruction_timer.start();
