@@ -65,7 +65,7 @@ public class PlanOverview extends AppCompatActivity {
 
 
 
-        String filedata = file_plan_reaser();
+        String filedata = file_plan_reader();
         trainning_data = file_data_organizer(filedata);
         num_weeks = Integer.parseInt(trainning_data.get("num_weeks"));
         days_total = Integer.parseInt(trainning_data.get("days_total"));
@@ -112,7 +112,7 @@ public class PlanOverview extends AppCompatActivity {
 
     // this methood uses the race_name to access and read the
     // custumized created schedule plan file
-    private String file_plan_reaser(){
+    private String file_plan_reader(){
         String filename = race_name+".txt";
 
         String filedata = new String();
@@ -203,7 +203,12 @@ public class PlanOverview extends AppCompatActivity {
 
             String day_data = trainning_data.get(""+(pressed+1));
 
+            if(days_progress[pressed]){
+                i = new Intent(PlanOverview.this, DayOverviewCompleted.class);
+            }
             String completed = days_progress[pressed] ? "Completed" : "To-Do";
+
+
 
             b.putString("completed", completed);
             b.putInt("day_number", (pressed+1));
