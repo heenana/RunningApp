@@ -27,38 +27,171 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="How many weeks would you like to train for?"
+            android:text="@string/chose_weeks"
             android:textSize="20dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingTop="12dp">
 
-            <Button
-                android:id="@+id/week_op1"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="0.33"
-                android:text="@string/week6" />
+            <RadioGroup
+                android:id="@+id/radio_weeks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                >
 
-            <Button
-                android:id="@+id/week_op2"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="0.33"
-                android:text="@string/week8" />
+                <RadioButton
+                    android:id="@+id/week_op1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/week6"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    />
 
-            <Button
-                android:id="@+id/week_op3"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="0.33"
-                android:text="@string/week10" />
+                <RadioButton
+                    android:id="@+id/week_op2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="@string/week8" />
+
+                <RadioButton
+                    android:id="@+id/week_op3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/week10" />
+
+            </RadioGroup>
+
+            <!--<Button-->
+                <!--android:id="@+id/week_op1"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="60dp"-->
+                <!--android:layout_weight="0.33"-->
+                <!--android:text="@string/week6" />-->
+
+            <!--<Button-->
+                <!--android:id="@+id/week_op2"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="60dp"-->
+                <!--android:layout_weight="0.33"-->
+                <!--android:text="@string/week8" />-->
+
+            <!--<Button-->
+                <!--android:id="@+id/week_op3"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="60dp"-->
+                <!--android:layout_weight="0.33"-->
+                <!--android:text="@string/week10" />-->
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="@string/chose_days"
+            android:textSize="20dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            android:paddingTop="12dp">
+
+            <RadioGroup
+                android:id="@+id/radio_daysperweek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                >
+
+                <RadioButton
+                    android:id="@+id/radio_d1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    />
+
+                <RadioButton
+                    android:id="@+id/radio_d2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="2" />
+
+                <RadioButton
+                    android:id="@+id/radio_d3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="3" />
+
+                <RadioButton
+                    android:id="@+id/radio_d4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="4" />
+
+                <RadioButton
+                    android:id="@+id/radio_d5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="5" />
+
+
+            </RadioGroup>
+        </LinearLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/relativeLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingTop="16dp">
+
+            <Button
+                android:id="@+id/beginplan_button"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="false"
+                android:background="#66ff66"
+                android:text="BEGIN WORKOUT PLAN!" />
+
+        </RelativeLayout>
+
     </LinearLayout>
+
+
 
     <android.support.design.widget.NavigationView
         android:layout_width="wrap_content"

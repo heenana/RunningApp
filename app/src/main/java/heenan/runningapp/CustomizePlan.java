@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.io.FileInputStream;
@@ -80,7 +82,7 @@ public class CustomizePlan extends AppCompatActivity {
         final int[] BUTTON_IDS = {R.id.week_op1, R.id.week_op2, R.id.week_op3};
         //Assigning button listener for each button id
         for (int i = 0; i < BUTTON_IDS.length; i++) {
-            race_week_buttons[i] = (Button) findViewById(BUTTON_IDS[i]);
+            race_week_buttons[i] = (RadioButton) findViewById(BUTTON_IDS[i]);
 
 
             String num_weeks = refined_weekly_plans.get(i).get("num_weeks")[0];
@@ -92,8 +94,13 @@ public class CustomizePlan extends AppCompatActivity {
 
             race_week_buttons[i].setText(num_weeks);
 
-            race_week_buttons[i].setOnClickListener(new CustomizePlan.ButtonClickListener());
+//            race_week_buttons[i].setOnClickListener(new CustomizePlan.ButtonClickListener());
         }
+
+        Button workout = (Button) findViewById(R.id.beginplan_button);
+        workout.setOnClickListener(new CustomizePlan.ButtonClickListener());
+
+
     }
 
     //Used if any option on action bar is clicked on
@@ -251,18 +258,43 @@ public class CustomizePlan extends AppCompatActivity {
             String created_plan_data = new String();
             String filename = new String();
 
+            RadioGroup weeks_option = (RadioGroup) findViewById(R.id.radio_weeks);
+            RadioGroup days_option = (RadioGroup) findViewById(R.id.radio_daysperweek);
+
+
+            int days_perweek = 0;
+
+            switch(days_option.getCheckedRadioButtonId()){
+                case R.id.radio_d1:
+                    days_perweek = 1;
+                break;
+                case R.id.radio_d2:
+                    days_perweek = 2;
+                    break;
+                case R.id.radio_d3:
+                    days_perweek = 3;
+                    break;
+                case R.id.radio_d4:
+                    days_perweek = 4;
+                    break;
+                case R.id.radio_d5:
+                    days_perweek = 5;
+                    break;
+            }
+
+            Log.e("DAYSPW", ""+days_perweek);
 
 
             Map<String, String[]> week_data = new HashMap<String, String[]>();
 
-            switch (view.getId()) {
+            switch (weeks_option.getCheckedRadioButtonId()) {
                 case R.id.week_op1:
                     //Type of race and number of weeks
 
 
                     week_data = refined_weekly_plans.get(0);
 
-                    created_plan_data = custom_plan_creator(week_data, 2);
+                    created_plan_data = custom_plan_creator(week_data, days_perweek);
                     filename = week_data.get("race_name")[0]+".txt";
                     file_creator_custom_plan(filename, created_plan_data);
 
@@ -278,7 +310,7 @@ public class CustomizePlan extends AppCompatActivity {
                 case R.id.week_op2:
 
                     week_data = refined_weekly_plans.get(1);
-                    created_plan_data = custom_plan_creator(week_data, 2);
+                    created_plan_data = custom_plan_creator(week_data, days_perweek);
                     filename = week_data.get("race_name")[0]+".txt";
                     file_creator_custom_plan(filename, created_plan_data);
 
@@ -293,7 +325,7 @@ public class CustomizePlan extends AppCompatActivity {
                 case R.id.week_op3:
 
                     week_data = refined_weekly_plans.get(2);
-                    created_plan_data = custom_plan_creator(week_data, 3);
+                    created_plan_data = custom_plan_creator(week_data, days_perweek);
                     filename = week_data.get("race_name")[0]+".txt";
                     file_creator_custom_plan(filename, created_plan_data);
 

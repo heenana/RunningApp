@@ -6,6 +6,8 @@
     <string name="race_15k">15K</string>
     <string name="race_halfmarathon">Half-Marathon</string>
     <string name="race_marathon">Marathon</string>
+    <string name="chose_weeks">How many weeks would you like to train for?</string>
+    <string name="chose_days">How many days per week would you like to train for?</string>
 
     <string name="plan_overview_title">Plan Overview</string>
     <string name="day_overview_title">Day Overview</string>
