@@ -2,12 +2,14 @@ package heenan.runningapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -134,6 +136,30 @@ public class DuringWorkout  extends AppCompatActivity {
             }
             task = task + 1;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                DuringWorkout.this);
+
+        alertDialog.setNegativeButton("Yes, I'm a wimp..", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //moveTaskToBack(true);
+                finish();
+            }
+        });
+        alertDialog.setPositiveButton("No, I got this..", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                moveTaskToBack(false);
+            }
+        });
+        alertDialog.setMessage("Are you sure you want to go back? Current progress will be erased.");
+        alertDialog.setTitle("Suck it up, you can do it!!!");
+        alertDialog.show();
+        moveTaskToBack(false);
     }
 
     //This class is for the time remaining timer
