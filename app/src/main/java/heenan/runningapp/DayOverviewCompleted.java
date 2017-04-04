@@ -1,6 +1,7 @@
 package heenan.runningapp;
 
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by gotal on 4/3/2017.
@@ -18,10 +20,11 @@ public class DayOverviewCompleted extends AppCompatActivity {
     //For navigation menu
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-
+    private NavigationView navigation;
     private Button race_week_buttons[];
     private String[] day_data;
     private double length;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class DayOverviewCompleted extends AppCompatActivity {
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
 
         mDrawerLayout.addDrawerListener(mToggle);
+        navBar();
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -76,5 +80,44 @@ public class DayOverviewCompleted extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    //Navigation menu - item on click
+    private void navBar() {
+        navigation = (NavigationView) findViewById(R.id.nav_menu);
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                //Intent i;
+                switch (id) {
+                    case R.id.plan_overview:
+                        Toast.makeText(DayOverviewCompleted.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
+                        //i = new Intent(MainActivity.this, PlanOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.next_workout:
+                        Toast.makeText(DayOverviewCompleted.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.history:
+                        Toast.makeText(DayOverviewCompleted.this, "History Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.new_race:
+                        Toast.makeText(DayOverviewCompleted.this, "New Race Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.settings:Toast.makeText(DayOverviewCompleted.this, "Settings Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 }

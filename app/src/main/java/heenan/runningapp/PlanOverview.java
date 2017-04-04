@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +47,7 @@ public class PlanOverview extends AppCompatActivity {
     //For navigation menu
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private NavigationView navigation;
     private Button[] button_days;
     private boolean file_existed;
 
@@ -59,6 +61,7 @@ public class PlanOverview extends AppCompatActivity {
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
 
         mDrawerLayout.addDrawerListener(mToggle);
+        navBar();
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -118,6 +121,45 @@ public class PlanOverview extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    //Navigation menu - item on click
+    private void navBar() {
+        navigation = (NavigationView) findViewById(R.id.nav_menu);
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                //Intent i;
+                switch (id) {
+                    case R.id.plan_overview:
+                        Toast.makeText(PlanOverview.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
+                        //i = new Intent(MainActivity.this, PlanOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.next_workout:
+                        Toast.makeText(PlanOverview.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.history:
+                        Toast.makeText(PlanOverview.this, "History Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.new_race:
+                        Toast.makeText(PlanOverview.this, "New Race Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.settings:Toast.makeText(PlanOverview.this, "Settings Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     // this methood uses the race_name to access and read the

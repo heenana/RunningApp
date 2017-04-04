@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by gotal on 3/22/2017.
@@ -23,7 +25,7 @@ public class DayOverview extends AppCompatActivity {
     //For navigation menu
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-
+    private NavigationView navigation;
     private Button race_week_buttons[];
     private String[] day_data;
     private double length;
@@ -39,6 +41,7 @@ public class DayOverview extends AppCompatActivity {
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
 
         mDrawerLayout.addDrawerListener(mToggle);
+        navBar();
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -85,6 +88,45 @@ public class DayOverview extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    //Navigation menu - item on click
+    private void navBar() {
+        navigation = (NavigationView) findViewById(R.id.nav_menu);
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                //Intent i;
+                switch (id) {
+                    case R.id.plan_overview:
+                        Toast.makeText(DayOverview.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
+                        //i = new Intent(MainActivity.this, PlanOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.next_workout:
+                        Toast.makeText(DayOverview.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.history:
+                        Toast.makeText(DayOverview.this, "History Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.new_race:
+                        Toast.makeText(DayOverview.this, "New Race Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.settings:Toast.makeText(DayOverview.this, "Settings Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     // Handles clicks on the number of weeks wanting to train

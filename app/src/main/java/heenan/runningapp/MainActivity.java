@@ -3,6 +3,7 @@ package heenan.runningapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     //For navigation menu
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private NavigationView navigation;
 
 
     @Override
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
 
         mDrawerLayout.addDrawerListener(mToggle);
+        navBar();
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -111,6 +114,45 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    //Navigation menu - item on click
+    private void navBar() {
+        navigation = (NavigationView) findViewById(R.id.nav_menu);
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                //Intent i;
+                switch (id) {
+                    case R.id.plan_overview:
+                        Toast.makeText(MainActivity.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
+                        //i = new Intent(MainActivity.this, PlanOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.next_workout:
+                        Toast.makeText(MainActivity.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.history:
+                        Toast.makeText(MainActivity.this, "History Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.new_race:
+                        Toast.makeText(MainActivity.this, "New Race Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.settings:Toast.makeText(MainActivity.this, "Settings Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     //Method reads entire contents from the Race Plan Master

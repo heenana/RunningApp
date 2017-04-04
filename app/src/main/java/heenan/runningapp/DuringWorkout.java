@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -33,6 +35,7 @@ public class DuringWorkout  extends AppCompatActivity {
     //For navigation menu
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private NavigationView navigation;
 
     //Variables that are used with the timer
     long time_left; //How much time needed left for the timer
@@ -52,6 +55,7 @@ public class DuringWorkout  extends AppCompatActivity {
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
 
         mDrawerLayout.addDrawerListener(mToggle);
+        navBar();
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -100,6 +104,45 @@ public class DuringWorkout  extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    //Navigation menu - item on click
+    private void navBar() {
+        navigation = (NavigationView) findViewById(R.id.nav_menu);
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                //Intent i;
+                switch (id) {
+                    case R.id.plan_overview:
+                        Toast.makeText(DuringWorkout.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
+                        //i = new Intent(MainActivity.this, PlanOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.next_workout:
+                        Toast.makeText(DuringWorkout.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.history:
+                        Toast.makeText(DuringWorkout.this, "History Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.new_race:
+                        Toast.makeText(DuringWorkout.this, "New Race Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                    case R.id.settings:Toast.makeText(DuringWorkout.this, "Settings Selected", Toast.LENGTH_SHORT).show();
+                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //startActivity(i);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private void timer_updater(){
