@@ -45,6 +45,7 @@ public class PlanOverview extends AppCompatActivity {
     //For navigation menu
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private Button[] button_days;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,19 +79,21 @@ public class PlanOverview extends AppCompatActivity {
         LinearLayout ll = (LinearLayout)findViewById(R.id.days_planoverview);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         //Created buttons for entire plan (30 days for now) ***
-        for(int i=0;i< days_total;i++){
-            Button myButton = new Button(this);
+        button_days = new Button[days_total];
 
-            myButton.setText("Day "+(i+1));
+        for(int i=0;i< days_total;i++){
+            button_days[i] = new Button(this);
+
+            button_days[i].setText("Day "+(i+1));
             Log.d("index", ""+i);
             //Completed days are shown in green
             if(days_progress[i]) {
-                myButton.setBackgroundColor(Color.rgb(50, 168, 54));
+                button_days[i].setBackgroundColor(Color.rgb(50, 168, 54));
             }
             //Set listener for day button in order to go to next activity
-            myButton.setId(i);
-            myButton.setOnClickListener(new PlanOverview.ButtonClickListener());
-            ll.addView(myButton, lp);
+            button_days[i].setId(i);
+            button_days[i].setOnClickListener(new PlanOverview.ButtonClickListener());
+            ll.addView(button_days[i], lp);
 
         }
 
@@ -208,6 +211,7 @@ public class PlanOverview extends AppCompatActivity {
 
             if(days_progress[pressed]){
                 i = new Intent(PlanOverview.this, DayOverviewCompleted.class);
+                i.putExtras(b);
                 startActivity(i);
             } else {
                 i.putExtras(b);
@@ -312,7 +316,31 @@ public class PlanOverview extends AppCompatActivity {
 
                 int day_completed = data.getIntExtra("day_completed", 0);
 
-                Log.e("HERE-----", ""+day_completed);
+                if(day_completed > 0){
+                    days_progress[day_completed - 1] = true;
+
+                    char[] my_days = trainning_data.get("days_progress").toCharArray();
+                    my_days[day_completed - 1] = '1';
+
+                    trainning_data.put("days_progress", String.valueOf(my_days));
+
+                    String[] day_data = trainning_data.get(""+day_completed).split(",");
+
+                    day_data[1] = "1";
+
+                    StringBuilder newDayString = new StringBuilder();
+                    newDayString.append(day_data[0]);
+                    for (int i = 1; i < day_data.length; i++){
+                        Log.e(""+i, day_data[i]);
+                        newDayString.append(","+day_data[i]);
+                    }
+
+                    trainning_data.put(""+day_completed, newDayString.toString());
+
+                    button_days[day_completed - 1].setBackgroundColor(Color.rgb(50, 168, 54));
+
+
+                }
 
             }
 
