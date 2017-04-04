@@ -194,6 +194,7 @@ public class CustomizePlan extends AppCompatActivity {
     private void file_creator_custom_plan(String filename, String filedata) {
         //Writing a file...
 
+        Log.e("filename is", filename);
 
         try {
             // catches IOException below
@@ -302,6 +303,7 @@ public class CustomizePlan extends AppCompatActivity {
                     b.putString("race_name", week_data.get("race_name")[0]);
                     b.putString("num_weeks", week_data.get("num_weeks")[0]);
                     b.putStringArray("weekly_sets", week_data.get("weekly_sets"));
+                    b.putBoolean("file_existed", false);
 
                     i.putExtras(b);
                     startActivity(i);
@@ -317,6 +319,7 @@ public class CustomizePlan extends AppCompatActivity {
                     b.putString("race_name", week_data.get("race_name")[0]);
                     b.putString("num_weeks", week_data.get("num_weeks")[0]);
                     b.putStringArray("weekly_sets", week_data.get("weekly_sets"));
+                    b.putBoolean("file_existed", false);
 
                     i.putExtras(b);
                     startActivity(i);
@@ -332,6 +335,7 @@ public class CustomizePlan extends AppCompatActivity {
                     b.putString("race_name", week_data.get("race_name")[0]);
                     b.putString("num_weeks", week_data.get("num_weeks")[0]);
                     b.putStringArray("weekly_sets", week_data.get("weekly_sets"));
+                    b.putBoolean("file_existed", false);
 
                     i.putExtras(b);
                     startActivity(i);

@@ -13,7 +13,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +55,52 @@ public class MainActivity extends AppCompatActivity {
             race_options_buttons[i].setOnClickListener(new ButtonClickListener());
         }
 
+
+        String[] race_name = new String[] {"5K", "10K", "15K", "Half-Marathon", "Marathon"};
+        for (int race = 0; race < race_name.length; race++){
+
+            Log.e("looking for", race_name[race]);
+
+            if(fileExists(getApplicationContext(), race_name[race]+".txt")){
+                Log.e(race_name[race]+".txt EXISTS!!", ":)");
+
+                Bundle b = new Bundle();
+                Intent i = new Intent(this, PlanOverview.class);
+
+                b.putString("race_name",race_name[race] );
+                b.putBoolean("file_existed", true);
+                i.putExtras(b);
+                startActivity(i);
+                break;
+            }
+        }
+    }
+
+
+    public boolean fileExists(Context context, String filename) {
+        File file = context.getFileStreamPath(filename);
+        if(file == null || !file.exists()) {
+            return false;
+        }
+
+        try {
+            FileInputStream fis = context.openFileInput(filename);
+            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            Log.e("PRINTING FILE",sb.toString() );
+            return sb.toString().length() > 10;
+        } catch (FileNotFoundException e) {
+            return false;
+        } catch (UnsupportedEncodingException e) {
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     //Used if any option on action bar is clicked on

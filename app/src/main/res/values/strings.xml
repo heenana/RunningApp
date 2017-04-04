@@ -9,7 +9,7 @@
     <string name="chose_weeks">How many weeks would you like to train for?</string>
     <string name="chose_days">How many days per week would you like to train for?</string>
 
-    <string name="plan_overview_title">Plan Overview</string>
+    <string name="plan_overview_title">Plan</string>
     <string name="day_overview_title">Day Overview</string>
     <string name="stats_title">Stats Overview</string>
     <string name="map_title">Map From Workout</string>

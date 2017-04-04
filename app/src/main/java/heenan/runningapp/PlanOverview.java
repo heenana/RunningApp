@@ -47,6 +47,7 @@ public class PlanOverview extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private Button[] button_days;
+    private boolean file_existed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,8 @@ public class PlanOverview extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
 
         race_name = b.getString("race_name");
+        file_existed = b.getBoolean("file_existed");
+
 
         String filedata = file_plan_reader();
         trainning_data = file_data_organizer(filedata);
@@ -71,8 +74,10 @@ public class PlanOverview extends AppCompatActivity {
         days_total = Integer.parseInt(trainning_data.get("days_total"));
         days_progress = new boolean[days_total];
 
-        for(int i = 0; i < trainning_data.get("days_progress").length(); i++){
-            days_progress[i] = trainning_data.get("days_progress").charAt(i) == 1;
+        for(int i = 0; i < days_total; i++){
+            Log.e("what is it??", trainning_data.get(""+(i+1)).split(",")[1]);
+            days_progress[i] = trainning_data.get(""+(i+1)).split(",")[1].equals("1");
+            Log.e(""+i, ""+days_progress[i]);
         }
 
         setTitle(getString(R.string.plan_overview_title)+": "+ race_name +" - "+num_weeks+" Weeks");
@@ -170,6 +175,7 @@ public class PlanOverview extends AppCompatActivity {
         String[] all_weeks_data = initial_arr[4].split("\\[");
 
         // create string of 0000s correspondoing to daystotal size
+
         String progress_days = new String(new char[Integer.parseInt(processed_data.get("days_total"))]).replace("\0", "0");
 
 
@@ -334,6 +340,9 @@ public class PlanOverview extends AppCompatActivity {
                     my_days[day_completed - 1] = '1';
 
                     trainning_data.put("days_progress", String.valueOf(my_days));
+
+                    Log.e("DAYSPROGRESS",trainning_data.get("days_progress"));
+
                     trainning_data.put("days_completed",
                             ""+(Integer.parseInt(trainning_data.get("days_completed" ))+1));
 
