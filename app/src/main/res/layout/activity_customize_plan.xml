@@ -185,7 +185,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="false"
                 android:background="#66ff66"
-                android:text="BEGIN WORKOUT PLAN!" />
+                android:text="BUILD WORKOUT PLAN!" />
 
         </RelativeLayout>
 
