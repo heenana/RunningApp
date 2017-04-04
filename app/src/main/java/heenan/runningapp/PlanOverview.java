@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -70,6 +71,9 @@ public class PlanOverview extends AppCompatActivity {
         days_total = Integer.parseInt(trainning_data.get("days_total"));
         days_progress = new boolean[days_total];
 
+        for(int i = 0; i < trainning_data.get("days_progress").length(); i++){
+            days_progress[i] = trainning_data.get("days_progress").charAt(i) == 1;
+        }
 
         setTitle(getString(R.string.plan_overview_title)+": "+ race_name +" - "+num_weeks+" Weeks");
         //Number of days shown in plan overview activity screen - hardcoded for now ****
@@ -150,7 +154,11 @@ public class PlanOverview extends AppCompatActivity {
     private Map<String, String> file_data_organizer(String filedata){
         Map<String, String> processed_data = new TreeMap<String, String>();
 
+        Log.e("filedata is", filedata);
         String[] initial_arr = filedata.split(";");
+
+        Log.e("INSIDE HEEERE", "RESPOND");
+        Log.e("InitialArr is", Arrays.toString(initial_arr));
 
         processed_data.put("race_name", initial_arr[0]);
         processed_data.put("num_weeks", initial_arr[1]);
@@ -251,7 +259,6 @@ public class PlanOverview extends AppCompatActivity {
     private void file_updater_custom_plan(String filename, String filedata) {
         //Writing a file...
 
-
         try {
             // catches IOException below
             final String TESTSTRING = new String(filedata);
@@ -317,17 +324,41 @@ public class PlanOverview extends AppCompatActivity {
                 int day_completed = data.getIntExtra("day_completed", 0);
 
                 if(day_completed > 0){
+
+
+
+                    // plan data update
                     days_progress[day_completed - 1] = true;
 
                     char[] my_days = trainning_data.get("days_progress").toCharArray();
                     my_days[day_completed - 1] = '1';
 
                     trainning_data.put("days_progress", String.valueOf(my_days));
+                    trainning_data.put("days_completed",
+                            ""+(Integer.parseInt(trainning_data.get("days_completed" ))+1));
 
+
+                    //week data update
+                    int week = (int) Math.ceil(day_completed /(days_total/num_weeks)) + 1;
+
+                    Log.e("value is", "week"+week);
+
+                    String[] week_data = trainning_data.get("week"+week).split(":");
+                    week_data[2] = ""+(Integer.parseInt(week_data[2])+1);
+                    StringBuilder newWeekString = new StringBuilder();
+
+                    newWeekString.append(week_data[0]);
+                    for(int w = 1; w < week_data.length; w++){
+                        newWeekString.append(":"+week_data[w]);
+                    }
+
+                    trainning_data.put("week"+week, newWeekString.toString());
+
+
+                    // day data update
                     String[] day_data = trainning_data.get(""+day_completed).split(",");
 
                     day_data[1] = "1";
-
                     StringBuilder newDayString = new StringBuilder();
                     newDayString.append(day_data[0]);
                     for (int i = 1; i < day_data.length; i++){
@@ -335,10 +366,16 @@ public class PlanOverview extends AppCompatActivity {
                         newDayString.append(","+day_data[i]);
                     }
 
+                    Log.e(""+day_completed, newDayString.toString());
+
                     trainning_data.put(""+day_completed, newDayString.toString());
 
                     button_days[day_completed - 1].setBackgroundColor(Color.rgb(50, 168, 54));
 
+                    String update_file_string = map_to_string_converter();
+
+                    Log.e(race_name+".txt", update_file_string);
+                    file_updater_custom_plan(race_name+".txt", update_file_string);
 
                 }
 
