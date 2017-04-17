@@ -1,11 +1,13 @@
 package heenan.runningapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +24,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,30 +64,64 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        String[] race_name = new String[] {"5K", "10K", "15K", "Half-Marathon", "Marathon"};
-        for (int race = 0; race < race_name.length; race++){
+        String[] race_name = new String[]{"5K", "10K", "15K", "Half-Marathon", "Marathon"};
+
+        Map<String, Boolean> existing_files = new HashMap<String, Boolean>();
+
+        for (int race = 0; race < race_name.length; race++) {
 
             Log.e("looking for", race_name[race]);
 
-            if(fileExists(getApplicationContext(), race_name[race]+".txt")){
-                Log.e(race_name[race]+".txt EXISTS!!", ":)");
 
-                Bundle b = new Bundle();
-                Intent i = new Intent(this, PlanOverview.class);
+            if (fileExists(getApplicationContext(), race_name[race] + ".txt")) {
 
-                b.putString("race_name",race_name[race] );
-                b.putBoolean("file_existed", true);
-                i.putExtras(b);
-                startActivity(i);
-                break;
+
+                Log.e(race_name[race] + ".txt EXISTS!!", ":)");
+                existing_files.put(race_name[race], true);
+
+
             }
+
+            existing_files.put("Create New Plan", false);
+        }
+
+        if (existing_files.size() > 0) {
+
+
+            final CharSequence[] race_names = existing_files.keySet().toArray(new CharSequence[existing_files.size()]);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Resume Existing Plan");
+            builder.setItems(race_names, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    String clicked_option = race_names[which].toString();
+
+                    if (!clicked_option.equals("Create New Plan")) {
+
+                        Bundle b = new Bundle();
+                        Intent i = new Intent(MainActivity.this, PlanOverview.class);
+
+                        b.putString("race_name", race_names[which].toString());
+                        b.putBoolean("file_existed", true);
+                        i.putExtras(b);
+                        startActivity(i);
+
+                    }
+
+
+                }
+            });
+            builder.show();
+
         }
     }
 
 
     public boolean fileExists(Context context, String filename) {
         File file = context.getFileStreamPath(filename);
-        if(file == null || !file.exists()) {
+        if (file == null || !file.exists()) {
             return false;
         }
 
@@ -95,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line).append("\n");
             }
-            Log.e("PRINTING FILE",sb.toString() );
+            Log.e("PRINTING FILE", sb.toString());
             return sb.toString().length() > 10;
         } catch (FileNotFoundException e) {
             return false;
@@ -109,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
     //Used if any option on action bar is clicked on
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(mToggle.onOptionsItemSelected(item)) {
+        if (mToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -145,7 +184,8 @@ public class MainActivity extends AppCompatActivity {
                         // i = new Intent(MainActivity.this, DayOverview.class);
                         //startActivity(i);
                         break;
-                    case R.id.settings:Toast.makeText(MainActivity.this, "Settings Selected", Toast.LENGTH_SHORT).show();
+                    case R.id.settings:
+                        Toast.makeText(MainActivity.this, "Settings Selected", Toast.LENGTH_SHORT).show();
                         // i = new Intent(MainActivity.this, DayOverview.class);
                         //startActivity(i);
                         break;
@@ -157,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Method reads entire contents from the Race Plan Master
     //Returns Array of Strings - Each string is a specific race plan for a week
-    public  String[] readAllPlanMaster(){
+    public String[] readAllPlanMaster() {
 
         String result;
         try {
@@ -179,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Get the three week plans associated with race type that is chosen
     public String[] getWeekOptions(int index) {
-        String [] plans = readAllPlanMaster();
+        String[] plans = readAllPlanMaster();
         String[] week_options = new String[3];
         for (int i = index; i <= index + 2; i++) {
             week_options[i % 3] = plans[i];
@@ -200,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
             Bundle b = new Bundle();  //Used to pass parameters between activities
             Intent i = new Intent(MainActivity.this, CustomizePlan.class);
 
-            Log.e("DID I GET HERE","PLEASE");
+            Log.e("DID I GET HERE", "PLEASE");
             DataReader testing_file = new DataReader();
             Log.e("failed here", "hope not");
             testing_file.readAllPlanMaster();
@@ -212,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
                     weeks = getWeekOptions(0);
                     Log.e("Week 1", weeks[0]);
                     //Passing selected race to next activity CustomizePlan
-                    b.putString("race_type",getString(R.string.race_5k));
+                    b.putString("race_type", getString(R.string.race_5k));
                     b.putStringArray("week_options", weeks);
 
 
@@ -230,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
                     weeks = getWeekOptions(3);
                     Log.e("Week 1", weeks[0]);
                     //Passing selected race to next activity CustomizePlan
-                    b.putString("race_type",getString(R.string.race_10k));
+                    b.putString("race_type", getString(R.string.race_10k));
                     b.putStringArray("week_options", weeks);
 
 //                   days_progress = new boolean[] {true, true, false, false, false};
@@ -247,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
                     weeks = getWeekOptions(6);
                     Log.e("Third week", weeks[2]);
                     //Passing selected race to next activity CustomizePlan
-                    b.putString("race_type",getString(R.string.race_15k));
+                    b.putString("race_type", getString(R.string.race_15k));
                     b.putStringArray("week_options", weeks);
 
                     i.putExtras(b);
@@ -257,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
                     weeks = getWeekOptions(9);
                     Log.e("Week 1", weeks[0]);
                     //Passing selected race to next activity CustomizePlan
-                    b.putString("race_type",getString(R.string.race_halfmarathon));
+                    b.putString("race_type", getString(R.string.race_halfmarathon));
                     b.putStringArray("week_options", weeks);
                     i.putExtras(b);
                     startActivity(i);
@@ -267,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
                     weeks = getWeekOptions(12);
                     Log.e("Week 1", weeks[0]);
                     //Passing selected race to next activity CustomizePlan
-                    b.putString("race_type",getString(R.string.race_marathon));
+                    b.putString("race_type", getString(R.string.race_marathon));
                     b.putStringArray("week_options", weeks);
                     i.putExtras(b);
                     startActivity(i);
