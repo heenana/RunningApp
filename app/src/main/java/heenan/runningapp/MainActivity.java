@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             existing_files.put("Create New Plan", false);
         }
 
-        if (existing_files.size() > 0) {
+        if (existing_files.size() > 1) {
 
 
             final CharSequence[] race_names = existing_files.keySet().toArray(new CharSequence[existing_files.size()]);
