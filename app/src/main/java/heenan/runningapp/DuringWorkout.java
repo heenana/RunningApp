@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import static java.lang.Thread.sleep;
@@ -39,6 +40,7 @@ public class DuringWorkout  extends AppCompatActivity {
     // GPS Variables
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private ArrayList<double[]> queried_gps_locations;
 
     private TextView[] timer_views;
     private double[] day_data;
@@ -103,22 +105,10 @@ public class DuringWorkout  extends AppCompatActivity {
         total_length.setText("Total Workout Time: " + (int) length + " minutes");
 
 
-        Log.e("GPS ENABLES?", "ABOUT TO CHECK");
-        GPSTracker gps = new GPSTracker(this);
-        if(gps.canGetLocation()){
-            Log.e("GPS IS ENABLED", "Thank God");
-
-            double latitude = gps.getLatitude(); // returns latitude
-            double longitude = gps.getLongitude(); // returns longitude
-
-            Log.e("LAT IS: ", ""+latitude );
-            Log.e("LON IS: ", ""+longitude );
 
 
-
-        } // gps enabled} // return boolean true/false
-
-
+        // array list to keep track of the user's gps locations through time
+        queried_gps_locations = new ArrayList<double[]>();
         timer_updater();
 
 
@@ -182,6 +172,8 @@ public class DuringWorkout  extends AppCompatActivity {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         TextView instruction = (TextView) findViewById(R.id.current_instruction);
 
+        GPSTracker gps = new GPSTracker(this);
+
         //Set the current instruction
         if(runWalkSwitch == 0){
             instruction.setText("Run!");
@@ -205,6 +197,21 @@ public class DuringWorkout  extends AppCompatActivity {
             } else {
                 runWalkSwitch = 0; //Run
             }
+
+            Log.e("GPS ENABLES?", "ABOUT TO CHECK");
+            if(gps.canGetLocation()){
+                Log.e("GPS IS ENABLED", "Thank God");
+
+                double latitude = gps.getLatitude(); // returns latitude
+                double longitude = gps.getLongitude(); // returns longitude
+
+                queried_gps_locations.add(new double[]{latitude, longitude});
+
+
+
+
+
+            } // gps enabled} // return boolean true/false
             task = task + 1;
         }
     }
@@ -388,6 +395,7 @@ public class DuringWorkout  extends AppCompatActivity {
                                     MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                         } catch (SecurityException e) {
                             Log.e("PERMISSION_EXCEPTION","PERMISSION_NOT_GRANTED");
+                            showSettingsAlert();
                         }
 
                         Log.d("Network", "Network");
@@ -397,6 +405,7 @@ public class DuringWorkout  extends AppCompatActivity {
                                         .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                             } catch (SecurityException e) {
                                 Log.e("PERMISSION_EXCEPTION","PERMISSION_NOT_GRANTED");
+                                showSettingsAlert();
                             }
 
                             if (location != null) {
@@ -415,6 +424,7 @@ public class DuringWorkout  extends AppCompatActivity {
                                         MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                             } catch (SecurityException e) {
                                 Log.e("PERMISSION_EXCEPTION","PERMISSION_NOT_GRANTED");
+                                showSettingsAlert();
                             }
 
                             Log.d("GPS Enabled", "GPS Enabled");
@@ -425,6 +435,7 @@ public class DuringWorkout  extends AppCompatActivity {
                                             .getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 } catch (SecurityException e) {
                                     Log.e("PERMISSION_EXCEPTION","PERMISSION_NOT_GRANTED");
+                                    showSettingsAlert();
                                 }
 
                                 if (location != null) {
@@ -453,6 +464,7 @@ public class DuringWorkout  extends AppCompatActivity {
                     locationManager.removeUpdates(GPSTracker.this);
                 } catch (SecurityException e) {
                     Log.e("PERMISSION_EXCEPTION","PERMISSION_NOT_GRANTED");
+                    showSettingsAlert();
                 }
             }
         }
