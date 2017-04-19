@@ -1,5 +1,6 @@
 package heenan.runningapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -123,12 +124,11 @@ public class CustomizePlan extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                //Intent i;
+                Intent i;
                 switch (id) {
                     case R.id.plan_overview:
-                        Toast.makeText(CustomizePlan.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
-                        //i = new Intent(MainActivity.this, PlanOverview.class);
-                        //startActivity(i);
+                        i = new Intent(CustomizePlan.this, MainActivity.class);
+                        startActivity(i);
                         break;
                     case R.id.next_workout:
                         Toast.makeText(CustomizePlan.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
@@ -141,9 +141,10 @@ public class CustomizePlan extends AppCompatActivity {
                         //startActivity(i);
                         break;
                     case R.id.new_race:
-                        Toast.makeText(CustomizePlan.this, "New Race Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("result", 1);
+                        setResult(Activity.RESULT_OK,returnIntent);
+                        finish();
                         break;
                     case R.id.settings:Toast.makeText(CustomizePlan.this, "Settings Selected", Toast.LENGTH_SHORT).show();
                         // i = new Intent(MainActivity.this, DayOverview.class);

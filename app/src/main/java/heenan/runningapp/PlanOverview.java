@@ -130,12 +130,11 @@ public class PlanOverview extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                //Intent i;
+                Intent i;
                 switch (id) {
                     case R.id.plan_overview:
-                        Toast.makeText(PlanOverview.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
-                        //i = new Intent(MainActivity.this, PlanOverview.class);
-                        //startActivity(i);
+                        Toast.makeText(PlanOverview.this, "Currently Viewing Plan Overview", Toast.LENGTH_SHORT).show();
+                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.next_workout:
                         Toast.makeText(PlanOverview.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
@@ -143,14 +142,13 @@ public class PlanOverview extends AppCompatActivity {
                         //startActivity(i);
                         break;
                     case R.id.history:
+                        //need to do still
                         Toast.makeText(PlanOverview.this, "History Selected", Toast.LENGTH_SHORT).show();
                         // i = new Intent(MainActivity.this, DayOverview.class);
                         //startActivity(i);
                         break;
                     case R.id.new_race:
-                        Toast.makeText(PlanOverview.this, "New Race Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
+                        finish();
                         break;
                     case R.id.settings:Toast.makeText(PlanOverview.this, "Settings Selected", Toast.LENGTH_SHORT).show();
                         // i = new Intent(MainActivity.this, DayOverview.class);

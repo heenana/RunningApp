@@ -1,7 +1,10 @@
 package heenan.runningapp;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -39,6 +42,7 @@ public class DayOverview extends AppCompatActivity {
         //To see navigation bar at top
         mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_day_overview);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+
 
         mDrawerLayout.addDrawerListener(mToggle);
         navBar();
@@ -97,17 +101,18 @@ public class DayOverview extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                //Intent i;
+                Intent i;
                 switch (id) {
                     case R.id.plan_overview:
-                        Toast.makeText(DayOverview.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
-                        //i = new Intent(MainActivity.this, PlanOverview.class);
-                        //startActivity(i);
+                        //Toast.makeText(DayOverview.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("result", 1);
+                        setResult(Activity.RESULT_OK,returnIntent);
+                        finish();
                         break;
                     case R.id.next_workout:
-                        Toast.makeText(DayOverview.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
+                        Toast.makeText(DayOverview.this, "Currently viewing latest workout", Toast.LENGTH_SHORT).show();
+                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.history:
                         Toast.makeText(DayOverview.this, "History Selected", Toast.LENGTH_SHORT).show();
@@ -115,9 +120,11 @@ public class DayOverview extends AppCompatActivity {
                         //startActivity(i);
                         break;
                     case R.id.new_race:
-                        Toast.makeText(DayOverview.this, "New Race Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
+                        Intent intent = new Intent(DayOverview.this,
+                                MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
                         break;
                     case R.id.settings:Toast.makeText(DayOverview.this, "Settings Selected", Toast.LENGTH_SHORT).show();
                         // i = new Intent(MainActivity.this, DayOverview.class);

@@ -50,6 +50,9 @@ public class DuringWorkout  extends AppCompatActivity {
     private ActionBarDrawerToggle mToggle;
     private NavigationView navigation;
 
+    boolean goToPlanOverView = false;
+    boolean goToNewRace = false;
+
     //Variables that are used with the timer
     long time_left; //How much time needed left for the timer
     int task; //Current task number you are at
@@ -131,17 +134,15 @@ public class DuringWorkout  extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                //Intent i;
+                Intent i;
                 switch (id) {
                     case R.id.plan_overview:
-                        Toast.makeText(DuringWorkout.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
-                        //i = new Intent(MainActivity.this, PlanOverview.class);
-                        //startActivity(i);
+                        goToPlanOverView = true;
+                        onBackPressed();
                         break;
                     case R.id.next_workout:
-                        Toast.makeText(DuringWorkout.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
+                        Toast.makeText(DuringWorkout.this, "Currently training for latest workout", Toast.LENGTH_SHORT).show();
+                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.history:
                         Toast.makeText(DuringWorkout.this, "History Selected", Toast.LENGTH_SHORT).show();
@@ -149,9 +150,8 @@ public class DuringWorkout  extends AppCompatActivity {
                         //startActivity(i);
                         break;
                     case R.id.new_race:
-                        Toast.makeText(DuringWorkout.this, "New Race Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
+                        goToNewRace = true;
+                        onBackPressed();
                         break;
                     case R.id.settings:Toast.makeText(DuringWorkout.this, "Settings Selected", Toast.LENGTH_SHORT).show();
                         // i = new Intent(MainActivity.this, DayOverview.class);
@@ -225,7 +225,24 @@ public class DuringWorkout  extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //moveTaskToBack(true);
-                finish();
+                if (goToPlanOverView) {
+                        goToPlanOverView = false;
+                        Intent intent = new Intent(DuringWorkout.this,
+                                PlanOverview.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                } else if (goToNewRace){
+                    goToNewRace = false;
+                    Intent intent = new Intent(DuringWorkout.this,
+                            MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                }
+                else {
+                    finish();
+                }
             }
         });
         alertDialog.setPositiveButton("No, I got this..", new DialogInterface.OnClickListener() {

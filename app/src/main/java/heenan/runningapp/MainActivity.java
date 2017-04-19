@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             final CharSequence[] race_names = existing_files.keySet().toArray(new CharSequence[existing_files.size()]);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Resume Existing Plan");
+            builder.setTitle("Which of your saved plans would you like to view?");
             builder.setItems(race_names, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -162,27 +162,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                //Intent i;
+                Intent i;
                 switch (id) {
                     case R.id.plan_overview:
-                        Toast.makeText(MainActivity.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
-                        //i = new Intent(MainActivity.this, PlanOverview.class);
-                        //startActivity(i);
+                        i = new Intent(MainActivity.this, MainActivity.class);
+                        startActivity(i);
                         break;
                     case R.id.next_workout:
                         Toast.makeText(MainActivity.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //i = new Intent(MainActivity.this, MainActivity.class);
                         //startActivity(i);
                         break;
                     case R.id.history:
                         Toast.makeText(MainActivity.this, "History Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
+                        //i = new Intent(MainActivity.this, MainActivity.class);
                         //startActivity(i);
                         break;
                     case R.id.new_race:
-                        Toast.makeText(MainActivity.this, "New Race Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
+                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.settings:
                         Toast.makeText(MainActivity.this, "Settings Selected", Toast.LENGTH_SHORT).show();

@@ -1,5 +1,7 @@
 package heenan.runningapp;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -89,12 +91,13 @@ public class DayOverviewCompleted extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                //Intent i;
+                Intent i;
                 switch (id) {
                     case R.id.plan_overview:
-                        Toast.makeText(DayOverviewCompleted.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
-                        //i = new Intent(MainActivity.this, PlanOverview.class);
-                        //startActivity(i);
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("result", 1);
+                        setResult(Activity.RESULT_OK,returnIntent);
+                        finish();
                         break;
                     case R.id.next_workout:
                         Toast.makeText(DayOverviewCompleted.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
@@ -107,9 +110,11 @@ public class DayOverviewCompleted extends AppCompatActivity {
                         //startActivity(i);
                         break;
                     case R.id.new_race:
-                        Toast.makeText(DayOverviewCompleted.this, "New Race Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
+                        Intent intent = new Intent(DayOverviewCompleted.this,
+                                MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
                         break;
                     case R.id.settings:Toast.makeText(DayOverviewCompleted.this, "Settings Selected", Toast.LENGTH_SHORT).show();
                         // i = new Intent(MainActivity.this, DayOverview.class);
