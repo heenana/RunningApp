@@ -368,10 +368,14 @@ public class PlanOverview extends AppCompatActivity {
                 Bundle b = data.getExtras();
 
                 int day_completed = data.getIntExtra("day_completed", 0);
+                String[] gps_locations = data.getStringArrayExtra("gps_locations");
+
 
                 if(day_completed > 0){
 
-
+                    Log.e("PO OAR", "about to print gpslocations");
+                    Log.e("gps size", ""+gps_locations.length);
+                    Log.e("gps contents", Arrays.toString(gps_locations));
 
                     // plan data update
                     days_progress[day_completed - 1] = true;
@@ -385,7 +389,6 @@ public class PlanOverview extends AppCompatActivity {
 
                     trainning_data.put("days_completed",
                             ""+(Integer.parseInt(trainning_data.get("days_completed" ))+1));
-
 
                     //week data update
                     int week = (int) Math.ceil(day_completed /(days_total/num_weeks)) + 1;
@@ -402,7 +405,6 @@ public class PlanOverview extends AppCompatActivity {
                     }
 
                     trainning_data.put("week"+week, newWeekString.toString());
-
 
                     // day data update
                     String[] day_data = trainning_data.get(""+day_completed).split(",");

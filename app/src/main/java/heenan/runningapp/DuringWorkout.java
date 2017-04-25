@@ -41,6 +41,7 @@ public class DuringWorkout  extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private ArrayList<double[]> queried_gps_locations;
+    private GPSTracker gps;
 
     private TextView[] timer_views;
     private double[] day_data;
@@ -112,6 +113,7 @@ public class DuringWorkout  extends AppCompatActivity {
 
         // array list to keep track of the user's gps locations through time
         queried_gps_locations = new ArrayList<double[]>();
+        gps = new GPSTracker(this);
         timer_updater();
 
 
@@ -172,7 +174,7 @@ public class DuringWorkout  extends AppCompatActivity {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         TextView instruction = (TextView) findViewById(R.id.current_instruction);
 
-        GPSTracker gps = new GPSTracker(this);
+
 
         //Set the current instruction
         if(runWalkSwitch == 0){
@@ -342,12 +344,38 @@ public class DuringWorkout  extends AppCompatActivity {
                 } else {
                     runWalkSwitch = 0; //Run
                 }
+
+                if(gps.canGetLocation()){
+                    Log.e("GPS IS ENABLED", "Thank God");
+
+                    double latitude = gps.getLatitude(); // returns latitude
+                    double longitude = gps.getLongitude(); // returns longitude
+
+                    queried_gps_locations.add(new double[]{latitude, longitude});
+
+
+
+
+
+                } // gps enabled} // return boolean true/false
+
                 task = task + 1;
             } else {
                 timer_views[0].setText("Done! You did a great job today!");
 
                 Intent returnIntent = new Intent();
+
                 returnIntent.putExtra("result", 1);
+
+
+                // transforms this array list into an string array of format ["lat1,long1","lat2,long2"..]
+                String[] gps_locations = new String[queried_gps_locations.size()];
+                for(int coord = 0; coord < gps_locations.length; coord++){
+                    gps_locations[coord] = Double.toString(queried_gps_locations.get(coord)[0]) +","+Double.toString(queried_gps_locations.get(coord)[1]);
+                }
+
+                // returns the gps_locations array to DayOverview, which in turn will be returned to PlanOverview
+                returnIntent.putExtra("gps_locations", gps_locations );
 
                 setResult(Activity.RESULT_OK,returnIntent);
                 finish();
