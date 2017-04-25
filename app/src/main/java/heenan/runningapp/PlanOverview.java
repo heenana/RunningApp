@@ -377,6 +377,10 @@ public class PlanOverview extends AppCompatActivity {
                     Log.e("gps size", ""+gps_locations.length);
                     Log.e("gps contents", Arrays.toString(gps_locations));
 
+                    Log.e("Day Completed is", ""+day_completed);
+
+                    Log.e("Map Contents", Arrays.toString(trainning_data.entrySet().toArray()));
+
                     // plan data update
                     days_progress[day_completed - 1] = true;
 
@@ -415,6 +419,12 @@ public class PlanOverview extends AppCompatActivity {
                     for (int i = 1; i < day_data.length; i++){
                         Log.e(""+i, day_data[i]);
                         newDayString.append(","+day_data[i]);
+                    }
+
+                    // putting the gps_location coordinates inside the day_completed map keyset
+
+                    for (int coord = 0; coord < gps_locations.length; coord++){
+                        newDayString.append(","+gps_locations[coord]);
                     }
 
                     Log.e(""+day_completed, newDayString.toString());

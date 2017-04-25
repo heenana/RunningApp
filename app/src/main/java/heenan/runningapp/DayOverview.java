@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * Created by gotal on 3/22/2017.
  */
@@ -171,8 +173,16 @@ public class DayOverview extends AppCompatActivity {
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
 
+
+                Bundle b = data.getExtras();
+
+                String[] gps_locations = data.getStringArrayExtra("gps_locations");
+
                 Intent returnIntent = new Intent();
+
+
                 returnIntent.putExtra("day_completed", day_number);
+                returnIntent.putExtra("gps_locations", gps_locations);
 
                 setResult(Activity.RESULT_OK,returnIntent);
 

@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 /**
  * Created by gotal on 4/3/2017.
  */
@@ -53,6 +55,10 @@ public class DayOverviewCompleted extends AppCompatActivity {
         String distance = "N/A";
         String avg_ws = "N/A";
         String avg_rs = "N/A";
+
+        Log.e("INSIDE DOC", "GOT DAY_DATA");
+        Log.e("Day Data Lenght", ""+day_data.length);
+        Log.e("DD contents", Arrays.toString(day_data));
 
         length = (Double.parseDouble(walk) + Double.parseDouble(run)) * Double.parseDouble(sets) + 10;
 
