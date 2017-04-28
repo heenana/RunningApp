@@ -1,6 +1,8 @@
 package heenan.runningapp;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +17,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -324,12 +327,26 @@ public class DuringWorkout  extends AppCompatActivity {
             Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             TextView instruction = (TextView) findViewById(R.id.current_instruction);
 
+            NotificationManager mNotificationManager;
+            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationCompat.Builder mBuilder;
+            int mId = 1;
+
             //Set the current instruction
             if(runWalkSwitch == 0){
+                mBuilder = new NotificationCompat.Builder(DuringWorkout.this)
+                        .setSmallIcon(R.drawable.default_map)
+                        .setContentTitle("Instruction")
+                        .setContentText("Run!");
                 instruction.setText("Run!");
             } else {
+                mBuilder = new NotificationCompat.Builder(DuringWorkout.this)
+                        .setSmallIcon(R.drawable.default_map)
+                        .setContentTitle("Instruction")
+                        .setContentText("Walk!");
                 instruction.setText("Walk!");
             }
+            mNotificationManager.notify(mId, mBuilder.build());
 
             //If you have yet to reach the final task, move onto the next task
             if(task != totalTasks) {
@@ -380,6 +397,7 @@ public class DuringWorkout  extends AppCompatActivity {
                 setResult(Activity.RESULT_OK,returnIntent);
                 finish();
             }
+            v.cancel();
         }
     }
 
