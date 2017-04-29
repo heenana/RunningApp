@@ -1,6 +1,7 @@
 package heenan.runningapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -78,9 +80,9 @@ public class PlanOverview extends AppCompatActivity {
         days_progress = new boolean[days_total];
 
         for(int i = 0; i < days_total; i++){
-            Log.e("what is it??", trainning_data.get(""+(i+1)).split(",")[1]);
+            //Log.e("what is it??", trainning_data.get(""+(i+1)).split(",")[1]);
             days_progress[i] = trainning_data.get(""+(i+1)).split(",")[1].equals("1");
-            Log.e(""+i, ""+days_progress[i]);
+            //Log.e(""+i, ""+days_progress[i]);
         }
 
         setTitle(getString(R.string.plan_overview_title)+": "+ race_name +" - "+num_weeks+" Weeks");
@@ -97,7 +99,7 @@ public class PlanOverview extends AppCompatActivity {
             button_days[i] = new Button(this);
 
             button_days[i].setText("Day "+(i+1));
-            Log.d("index", ""+i);
+           // Log.d("index", ""+i);
             //Completed days are shown in green
             if(days_progress[i]) {
                 button_days[i].setBackgroundColor(Color.rgb(50, 168, 54));
@@ -137,22 +139,14 @@ public class PlanOverview extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         break;
                     case R.id.next_workout:
-                        Toast.makeText(PlanOverview.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
-                        break;
-                    case R.id.history:
-                        //need to do still
-                        Toast.makeText(PlanOverview.this, "History Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
+                        getNextWorkout();
                         break;
                     case R.id.new_race:
-                        finish();
-                        break;
-                    case R.id.settings:Toast.makeText(PlanOverview.this, "Settings Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
+                        Intent intent = new Intent(PlanOverview.this,
+                                MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
                         break;
                 }
                 return false;
@@ -160,10 +154,39 @@ public class PlanOverview extends AppCompatActivity {
         });
     }
 
+    public void getNextWorkout() {
+        String get_plan = file_plan_reader();
+        Log.e("This is the plan", get_plan);
+        String[] initial_arr = get_plan.split(";");
+        String[] get_day_plans = get_plan.split("\\(");
+        int day_number = Integer.parseInt(initial_arr[3]);
+        String day_data;
+        if (day_number == 0) {
+            day_data = get_day_plans[1];
+        } else {
+            day_data = get_day_plans[day_number];
+        }
+        String completed = "To-Do";
+        boolean fromPlanOverview = false;
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(PlanOverview.this, DayOverview.class);
+        bundle.putBoolean("fromPlanOverview", fromPlanOverview);
+        bundle.putString("race_name", race_name);
+        bundle.putString("completed", completed);
+        bundle.putInt("day_number", day_number + 1);
+        bundle.putString("day_data", day_data);
+        Log.e("completed", completed);
+        Log.e("day_number", "" + day_number);
+        Log.e("day_data", day_data);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 1);
+
+    }
     // this methood uses the race_name to access and read the
     // custumized created schedule plan file
     private String file_plan_reader(){
         String filename = race_name+".txt";
+        Log.e("what is the race name", race_name);
 
         String filedata = new String();
 
@@ -199,7 +222,7 @@ public class PlanOverview extends AppCompatActivity {
     private Map<String, String> file_data_organizer(String filedata){
         Map<String, String> processed_data = new TreeMap<String, String>();
 
-        Log.e("filedata is", filedata);
+        Log.e("FILEDATA ISSSS", filedata);
         String[] initial_arr = filedata.split(";");
 
         Log.e("INSIDE HEEERE", "RESPOND");
@@ -232,7 +255,7 @@ public class PlanOverview extends AppCompatActivity {
 
             for(int day = 1; day < single_week_data.length; day++){
                 int current_day = ((week - 1) * days_perweek) + day;
-                Log.e("CURRENTDAY", ""+current_day);
+                //Log.e("CURRENTDAY", ""+current_day);
                 processed_data.put(""+current_day, single_week_data[day]);
             }
         }
@@ -258,10 +281,13 @@ public class PlanOverview extends AppCompatActivity {
 
             String day_data = trainning_data.get(""+(pressed+1));
             String completed = days_progress[pressed] ? "Completed" : "To-Do";
-
+            String race = race_name;
+            boolean fromPlanOverview = true;
+            b.putBoolean("fromPlanOverview", fromPlanOverview);
             b.putString("completed", completed);
             b.putInt("day_number", (pressed+1));
             b.putString("day_data", day_data);
+            b.putString("race_name", race);
 
             if(days_progress[pressed]){
                 i = new Intent(PlanOverview.this, DayOverviewCompleted.class);

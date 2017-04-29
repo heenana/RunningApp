@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView navigation;
+    private boolean next_workout = false;
+    private String race_name;
+    private Map<String, Boolean> existing_files;
 
 
     @Override
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         navBar();
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mDrawerLayout.closeDrawers();
 
         race_options_buttons = new Button[5];
 
@@ -66,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         String[] race_name = new String[]{"5K", "10K", "15K", "Half-Marathon", "Marathon"};
 
-        Map<String, Boolean> existing_files = new HashMap<String, Boolean>();
+        existing_files = new HashMap<String, Boolean>();
 
         for (int race = 0; race < race_name.length; race++) {
 
@@ -111,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+            mDrawerLayout.closeDrawers();
             builder.show();
         }
     }
@@ -152,6 +157,40 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // this methood uses the race_name to access and read the
+    // custumized created schedule plan file
+    private String file_plan_reader(){
+        String filename = race_name+".txt";
+
+        String filedata = new String();
+
+        try {
+
+            FileInputStream fIn = openFileInput(filename);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fIn));
+
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+
+            reader.close();
+            filedata = sb.toString();
+            filedata = filedata.replace("\n", "").replace("\r", "");
+            fIn.close();
+
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        Log.e("FileSize", ""+filedata.length());
+        Log.e("FileData", filedata);
+
+        return filedata;
+    }
+
     //Navigation menu - item on click
     private void navBar() {
         navigation = (NavigationView) findViewById(R.id.nav_menu);
@@ -166,27 +205,63 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(i);
                         break;
                     case R.id.next_workout:
-                        Toast.makeText(MainActivity.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
-                        //i = new Intent(MainActivity.this, MainActivity.class);
-                        //startActivity(i);
-                        break;
-                    case R.id.history:
-                        Toast.makeText(MainActivity.this, "History Selected", Toast.LENGTH_SHORT).show();
-                        //i = new Intent(MainActivity.this, MainActivity.class);
-                        //startActivity(i);
+                        //Toast.makeText(MainActivity.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
+                        getNextWorkout();
                         break;
                     case R.id.new_race:
                         mDrawerLayout.closeDrawers();
-                        break;
-                    case R.id.settings:
-                        Toast.makeText(MainActivity.this, "Settings Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
                         break;
                 }
                 return false;
             }
         });
+    }
+
+    public void getNextWorkout() {
+        final CharSequence[] race_names = existing_files.keySet().toArray(new CharSequence[existing_files.size()]);
+        //Find the plan the user wants to view the next workout for
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Which of your saved plans would you like to view?");
+        builder.setItems(race_names, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String clicked_option = race_names[which].toString();
+
+                if (!clicked_option.equals("Create New Plan")) {
+                    race_name = clicked_option;
+                    String get_plan = file_plan_reader();
+                    Log.e("This is the plan", get_plan);
+                    String[] initial_arr = get_plan.split(";");
+                    String[] get_day_plans = get_plan.split("\\(");
+                    int day_number = Integer.parseInt(initial_arr[3]);
+                    //Information associated with the day of next workout
+                    String day_data;
+                    if (day_number == 0) {
+                        day_data = get_day_plans[1];
+                    } else {
+                        day_data = get_day_plans[day_number];
+                    }
+                    String completed = "To-Do";
+                    boolean fromPlanOverview = false;
+                    Bundle bundle = new Bundle();
+                    Intent intent = new Intent(MainActivity.this, DayOverview.class);
+                    bundle.putBoolean("fromPlanOverview", fromPlanOverview);
+                    bundle.putString("race_name", race_name);
+                    bundle.putString("completed", completed);
+                    bundle.putInt("day_number", day_number+1);
+                    bundle.putString("day_data", day_data);
+                    Log.e("completed", completed);
+                    Log.e("day_number", ""+day_number);
+                    Log.e("day_data", day_data);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 1);
+
+                }
+            }
+        });
+        mDrawerLayout.closeDrawers();
+        builder.show();
     }
 
     //Method reads entire contents from the Race Plan Master
@@ -233,7 +308,6 @@ public class MainActivity extends AppCompatActivity {
 
             Bundle b = new Bundle();  //Used to pass parameters between activities
             Intent i = new Intent(MainActivity.this, CustomizePlan.class);
-
             Log.e("DID I GET HERE", "PLEASE");
             DataReader testing_file = new DataReader();
             Log.e("failed here", "hope not");

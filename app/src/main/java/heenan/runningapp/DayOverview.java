@@ -8,10 +8,12 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +37,8 @@ public class DayOverview extends AppCompatActivity {
     private String[] day_data;
     private double length;
     private int day_number;
+    private String race_name;
+    private boolean fromPlanOverview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,11 @@ public class DayOverview extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
 
+
+        race_name = b.getString("race_name");
         day_number = b.getInt("day_number");
+        fromPlanOverview = b.getBoolean("fromPlanOverview");
+        Log.e("fromPlanOverview", ""+fromPlanOverview);
         String completed = b.getString("completed");
         day_data = b.getString("day_data").split(",");
         String sets = day_data[2];
@@ -89,12 +97,22 @@ public class DayOverview extends AppCompatActivity {
     //Used if any option on action bar is clicked on
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(mToggle.onOptionsItemSelected(item)) {
+        if (mToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
 
     }
+    @Override
+    public void onBackPressed() {
+        if (fromPlanOverview) {
+            finish();
+        } else {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        }
+
+    }
+
 
     //Navigation menu - item on click
     private void navBar() {
@@ -106,31 +124,23 @@ public class DayOverview extends AppCompatActivity {
                 Intent i;
                 switch (id) {
                     case R.id.plan_overview:
-                        //Toast.makeText(DayOverview.this, "Plan Overview Selected", Toast.LENGTH_SHORT).show();
-                        Intent returnIntent = new Intent();
-                        returnIntent.putExtra("result", 1);
-                        setResult(Activity.RESULT_OK,returnIntent);
-                        finish();
+                        Bundle b = new Bundle();
+                        Intent intent = new Intent(DayOverview.this, PlanOverview.class);
+                        b.putString("race_name", race_name);
+                        b.putBoolean("file_existed", true);
+                        intent.putExtras(b);
+                        startActivity(intent);
                         break;
                     case R.id.next_workout:
                         Toast.makeText(DayOverview.this, "Currently viewing latest workout", Toast.LENGTH_SHORT).show();
                         mDrawerLayout.closeDrawers();
                         break;
-                    case R.id.history:
-                        Toast.makeText(DayOverview.this, "History Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
-                        break;
                     case R.id.new_race:
-                        Intent intent = new Intent(DayOverview.this,
+                        Intent intent_ = new Intent(DayOverview.this,
                                 MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        intent_.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        startActivity(intent);
-                        break;
-                    case R.id.settings:Toast.makeText(DayOverview.this, "Settings Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
+                        startActivity(intent_);
                         break;
                 }
                 return false;
@@ -152,10 +162,10 @@ public class DayOverview extends AppCompatActivity {
             switch (view.getId()) {
                 case R.id.begin_button:
                     //Type of race and number of weeks
-
+                    b.putString("race_name", race_name);
                     b.putStringArray("day_data", day_data);
                     b.putDouble("length", length);
-
+                    b.putBoolean("fromPlanOverview", fromPlanOverview);
                     i.putExtras(b);
                     startActivityForResult(i, 1);
 
@@ -171,7 +181,7 @@ public class DayOverview extends AppCompatActivity {
 
         Log.e("do i get here?", "plz");
         if (requestCode == 1) {
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
 
 
                 Bundle b = data.getExtras();
@@ -184,7 +194,7 @@ public class DayOverview extends AppCompatActivity {
                 returnIntent.putExtra("day_completed", day_number);
                 returnIntent.putExtra("gps_locations", gps_locations);
 
-                setResult(Activity.RESULT_OK,returnIntent);
+                setResult(Activity.RESULT_OK, returnIntent);
 
                 Log.e("go to plan overview", "plz");
                 finish();

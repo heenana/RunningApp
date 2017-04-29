@@ -38,7 +38,7 @@ import static java.lang.Thread.sleep;
  * Created by gotal on 3/31/2017.
  */
 
-public class DuringWorkout  extends AppCompatActivity {
+public class DuringWorkout extends AppCompatActivity {
 
     // GPS Variables
     private LocationManager locationManager;
@@ -56,13 +56,14 @@ public class DuringWorkout  extends AppCompatActivity {
 
     boolean goToPlanOverView = false;
     boolean goToNewRace = false;
+    private boolean fromPlanOverview;
+    private String race_name = "Do no need";
 
     //Variables that are used with the timer
     long time_left; //How much time needed left for the timer
     int task; //Current task number you are at
-    double totalTasks; //Total tasks to be completed (sets * 2)
+    double totalTasks; //Total tasks to be completed (sets * 2) Look here
     int runWalkSwitch; //(run - 0) -- (walk - 1)
-
 
 
     @Override
@@ -81,11 +82,15 @@ public class DuringWorkout  extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
 
+        fromPlanOverview = b.getBoolean("fromPlanOverview");
+        if (!fromPlanOverview) {
+            race_name = b.getString("race_name");
+        }
         String[] temp_arr = b.getStringArray("day_data");
 
         day_data = new double[5];
 
-        for(int i = 0; i < temp_arr.length; i++){
+        for (int i = 0; i < 5; i++) {
             day_data[i] = Double.parseDouble(temp_arr[i]);
         }
 
@@ -96,22 +101,19 @@ public class DuringWorkout  extends AppCompatActivity {
         double walk = day_data[4];
 
 
-
         TextView running = (TextView) findViewById(R.id.run);
         TextView walking = (TextView) findViewById(R.id.walk);
         TextView sets_num = (TextView) findViewById(R.id.sets);
         TextView total_length = (TextView) findViewById(R.id.length);
 
         timer_views = new TextView[]{(TextView) findViewById(R.id.timer_current_instruction),
-                                    (TextView) findViewById(R.id.current_instruction),
-                                    (TextView) findViewById(R.id.time_left)};
+                (TextView) findViewById(R.id.current_instruction),
+                (TextView) findViewById(R.id.time_left)};
 
         running.setText("Run: " + run + " minutes");
         walking.setText("Walk: " + walk + " minutes");
         sets_num.setText("Sets: " + (int) sets);
         total_length.setText("Total Workout Time: " + (int) length + " minutes");
-
-
 
 
         // array list to keep track of the user's gps locations through time
@@ -125,7 +127,7 @@ public class DuringWorkout  extends AppCompatActivity {
     //Used if any option on action bar is clicked on
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(mToggle.onOptionsItemSelected(item)) {
+        if (mToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -149,18 +151,9 @@ public class DuringWorkout  extends AppCompatActivity {
                         Toast.makeText(DuringWorkout.this, "Currently training for latest workout", Toast.LENGTH_SHORT).show();
                         mDrawerLayout.closeDrawers();
                         break;
-                    case R.id.history:
-                        Toast.makeText(DuringWorkout.this, "History Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
-                        break;
                     case R.id.new_race:
                         goToNewRace = true;
                         onBackPressed();
-                        break;
-                    case R.id.settings:Toast.makeText(DuringWorkout.this, "Settings Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
                         break;
                 }
                 return false;
@@ -168,9 +161,9 @@ public class DuringWorkout  extends AppCompatActivity {
         });
     }
 
-    private void timer_updater(){
+    private void timer_updater() {
 
-        task = 0; //Current task number you are at
+        task = 0; //Current task number you are
         totalTasks = day_data[2] * 2; //Total tasks to be completed (sets * 2)
         runWalkSwitch = 0; //(run - 0) -- (walk - 1)
         // Get instance of Vibrator from current Context
@@ -178,42 +171,38 @@ public class DuringWorkout  extends AppCompatActivity {
         TextView instruction = (TextView) findViewById(R.id.current_instruction);
 
 
-
         //Set the current instruction
-        if(runWalkSwitch == 0){
+        if (runWalkSwitch == 0) {
             instruction.setText("Run!");
         } else {
             instruction.setText("Walk!");
         }
 
-        TimerLeft timerLeft = new TimerLeft((long)length*60000,1000);
+        TimerLeft timerLeft = new TimerLeft((long) length * 60000, 1000);
         timerLeft.start();
 
         //If you have yet to reach the final task, move onto the next task
-        if(task != totalTasks){
+        if (task != totalTasks) {
             time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
             v.vibrate(1000);
             //Create new timer and use time_left
             Timer next_instruction_timer = new Timer(time_left, 1000);
             next_instruction_timer.start();
             //Update the switch so you can correctly access the running or walking time
-            if(runWalkSwitch == 0){
+            if (runWalkSwitch == 0) {
                 runWalkSwitch = 1; //Walk
             } else {
                 runWalkSwitch = 0; //Run
             }
 
             Log.e("GPS ENABLES?", "ABOUT TO CHECK");
-            if(gps.canGetLocation()){
+            if (gps.canGetLocation()) {
                 Log.e("GPS IS ENABLED", "Thank God");
 
                 double latitude = gps.getLatitude(); // returns latitude
                 double longitude = gps.getLongitude(); // returns longitude
 
                 queried_gps_locations.add(new double[]{latitude, longitude});
-
-
-
 
 
             } // gps enabled} // return boolean true/false
@@ -231,21 +220,29 @@ public class DuringWorkout  extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 //moveTaskToBack(true);
                 if (goToPlanOverView) {
-                        goToPlanOverView = false;
+                    goToPlanOverView = false;
+                    if (fromPlanOverview) {
                         Intent intent = new Intent(DuringWorkout.this,
                                 PlanOverview.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
-                } else if (goToNewRace){
+                    } else {
+                        Bundle b_ = new Bundle();
+                        Intent intent_ = new Intent(DuringWorkout.this, PlanOverview.class);
+                        b_.putString("race_name", race_name);
+                        b_.putBoolean("file_existed", true);
+                        intent_.putExtras(b_);
+                        startActivity(intent_);
+                    }
+                } else if (goToNewRace) {
                     goToNewRace = false;
                     Intent intent = new Intent(DuringWorkout.this,
                             MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                             | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
-                }
-                else {
+                } else {
                     finish();
                 }
             }
@@ -263,7 +260,7 @@ public class DuringWorkout  extends AppCompatActivity {
     }
 
     //This class is for the time remaining timer
-    private class TimerLeft extends CountDownTimer{
+    private class TimerLeft extends CountDownTimer {
         /**
          * @param millisInFuture    The number of millis in the future from the call
          *                          to {@link #start()} until the countdown is done and {@link #onFinish()}
@@ -293,7 +290,7 @@ public class DuringWorkout  extends AppCompatActivity {
     }
 
 
-    private class Timer extends CountDownTimer{
+    private class Timer extends CountDownTimer {
 
         /**
          * @param millisInFuture    The number of millis in the future from the call
@@ -333,7 +330,7 @@ public class DuringWorkout  extends AppCompatActivity {
             int mId = 1;
 
             //Set the current instruction
-            if(runWalkSwitch == 0){
+            if (runWalkSwitch == 0) {
                 mBuilder = new NotificationCompat.Builder(DuringWorkout.this)
                         .setSmallIcon(R.drawable.default_map)
                         .setContentTitle("Instruction")
@@ -349,29 +346,26 @@ public class DuringWorkout  extends AppCompatActivity {
             mNotificationManager.notify(mId, mBuilder.build());
 
             //If you have yet to reach the final task, move onto the next task
-            if(task != totalTasks) {
+            if (task != totalTasks) {
                 time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
                 v.vibrate(1000);
                 //Create new timer and use time_left
                 Timer next_instruction_timer = new Timer(time_left, 1000);
                 next_instruction_timer.start();
                 //Update the switch so you can correctly access the running or walking time
-                if(runWalkSwitch == 0){
+                if (runWalkSwitch == 0) {
                     runWalkSwitch = 1; //Walk
                 } else {
                     runWalkSwitch = 0; //Run
                 }
 
-                if(gps.canGetLocation()){
+                if (gps.canGetLocation()) {
                     Log.e("GPS IS ENABLED", "Thank God");
 
                     double latitude = gps.getLatitude(); // returns latitude
                     double longitude = gps.getLongitude(); // returns longitude
 
                     queried_gps_locations.add(new double[]{latitude, longitude});
-
-
-
 
 
                 } // gps enabled} // return boolean true/false
@@ -387,14 +381,14 @@ public class DuringWorkout  extends AppCompatActivity {
 
                 // transforms this array list into an string array of format ["lat1,long1","lat2,long2"..]
                 String[] gps_locations = new String[queried_gps_locations.size()];
-                for(int coord = 0; coord < gps_locations.length; coord++){
-                    gps_locations[coord] = Double.toString(queried_gps_locations.get(coord)[0]) +","+Double.toString(queried_gps_locations.get(coord)[1]);
+                for (int coord = 0; coord < gps_locations.length; coord++) {
+                    gps_locations[coord] = Double.toString(queried_gps_locations.get(coord)[0]) + "," + Double.toString(queried_gps_locations.get(coord)[1]);
                 }
 
                 // returns the gps_locations array to DayOverview, which in turn will be returned to PlanOverview
-                returnIntent.putExtra("gps_locations", gps_locations );
+                returnIntent.putExtra("gps_locations", gps_locations);
 
-                setResult(Activity.RESULT_OK,returnIntent);
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
             v.cancel();
@@ -457,7 +451,7 @@ public class DuringWorkout  extends AppCompatActivity {
                                     MIN_TIME_BW_UPDATES,
                                     MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                         } catch (SecurityException e) {
-                            Log.e("PERMISSION_EXCEPTION","PERMISSION_NOT_GRANTED");
+                            Log.e("PERMISSION_EXCEPTION", "PERMISSION_NOT_GRANTED");
                             showSettingsAlert();
                         }
 
@@ -467,7 +461,7 @@ public class DuringWorkout  extends AppCompatActivity {
                                 location = locationManager
                                         .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                             } catch (SecurityException e) {
-                                Log.e("PERMISSION_EXCEPTION","PERMISSION_NOT_GRANTED");
+                                Log.e("PERMISSION_EXCEPTION", "PERMISSION_NOT_GRANTED");
                                 showSettingsAlert();
                             }
 
@@ -486,7 +480,7 @@ public class DuringWorkout  extends AppCompatActivity {
                                         MIN_TIME_BW_UPDATES,
                                         MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                             } catch (SecurityException e) {
-                                Log.e("PERMISSION_EXCEPTION","PERMISSION_NOT_GRANTED");
+                                Log.e("PERMISSION_EXCEPTION", "PERMISSION_NOT_GRANTED");
                                 showSettingsAlert();
                             }
 
@@ -497,7 +491,7 @@ public class DuringWorkout  extends AppCompatActivity {
                                     location = locationManager
                                             .getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 } catch (SecurityException e) {
-                                    Log.e("PERMISSION_EXCEPTION","PERMISSION_NOT_GRANTED");
+                                    Log.e("PERMISSION_EXCEPTION", "PERMISSION_NOT_GRANTED");
                                     showSettingsAlert();
                                 }
 
@@ -520,13 +514,13 @@ public class DuringWorkout  extends AppCompatActivity {
         /**
          * Stop using GPS listener
          * Calling this function will stop using GPS in your app
-         * */
-        public void stopUsingGPS(){
-            if(locationManager != null){
+         */
+        public void stopUsingGPS() {
+            if (locationManager != null) {
                 try {
                     locationManager.removeUpdates(GPSTracker.this);
                 } catch (SecurityException e) {
-                    Log.e("PERMISSION_EXCEPTION","PERMISSION_NOT_GRANTED");
+                    Log.e("PERMISSION_EXCEPTION", "PERMISSION_NOT_GRANTED");
                     showSettingsAlert();
                 }
             }
@@ -534,9 +528,9 @@ public class DuringWorkout  extends AppCompatActivity {
 
         /**
          * Function to get latitude
-         * */
-        public double getLatitude(){
-            if(location != null){
+         */
+        public double getLatitude() {
+            if (location != null) {
                 latitude = location.getLatitude();
             }
 
@@ -546,9 +540,9 @@ public class DuringWorkout  extends AppCompatActivity {
 
         /**
          * Function to get longitude
-         * */
-        public double getLongitude(){
-            if(location != null){
+         */
+        public double getLongitude() {
+            if (location != null) {
                 longitude = location.getLongitude();
             }
 
@@ -558,8 +552,9 @@ public class DuringWorkout  extends AppCompatActivity {
 
         /**
          * Function to check GPS/wifi enabled
+         *
          * @return boolean
-         * */
+         */
         public boolean canGetLocation() {
             return this.canGetLocation;
         }
@@ -567,8 +562,8 @@ public class DuringWorkout  extends AppCompatActivity {
         /**
          * Function to show settings alert dialog
          * On pressing Settings button will lauch Settings Options
-         * */
-        public void showSettingsAlert(){
+         */
+        public void showSettingsAlert() {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
             // Setting Dialog Title
@@ -579,7 +574,7 @@ public class DuringWorkout  extends AppCompatActivity {
 
             // On pressing Settings button
             alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,int which) {
+                public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     mContext.startActivity(intent);
                 }

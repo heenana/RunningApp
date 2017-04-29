@@ -203,13 +203,6 @@ public class DayOverviewCompleted extends AppCompatActivity {
                         break;
                     case R.id.next_workout:
                         Toast.makeText(DayOverviewCompleted.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
-                        break;
-                    case R.id.history:
-                        Toast.makeText(DayOverviewCompleted.this, "History Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
                         break;
                     case R.id.new_race:
                         Intent intent = new Intent(DayOverviewCompleted.this,
@@ -217,10 +210,6 @@ public class DayOverviewCompleted extends AppCompatActivity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
-                        break;
-                    case R.id.settings:Toast.makeText(DayOverviewCompleted.this, "Settings Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
                         break;
                 }
                 return false;

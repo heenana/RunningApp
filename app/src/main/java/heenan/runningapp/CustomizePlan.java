@@ -2,13 +2,16 @@ package heenan.runningapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -120,25 +123,20 @@ public class CustomizePlan extends AppCompatActivity {
     //Navigation menu - item on click
     private void navBar() {
         navigation = (NavigationView) findViewById(R.id.nav_menu);
+        //Do not display next workout on menu
+        Menu nav_Menu = navigation.getMenu();
+        nav_Menu.findItem(R.id.next_workout).setVisible(false);
+
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
+
                 Intent i;
                 switch (id) {
                     case R.id.plan_overview:
                         i = new Intent(CustomizePlan.this, MainActivity.class);
                         startActivity(i);
-                        break;
-                    case R.id.next_workout:
-                        Toast.makeText(CustomizePlan.this, "Next Workout Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
-                        break;
-                    case R.id.history:
-                        Toast.makeText(CustomizePlan.this, "History Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
                         break;
                     case R.id.new_race:
                         Intent returnIntent = new Intent();
@@ -146,15 +144,12 @@ public class CustomizePlan extends AppCompatActivity {
                         setResult(Activity.RESULT_OK,returnIntent);
                         finish();
                         break;
-                    case R.id.settings:Toast.makeText(CustomizePlan.this, "Settings Selected", Toast.LENGTH_SHORT).show();
-                        // i = new Intent(MainActivity.this, DayOverview.class);
-                        //startActivity(i);
-                        break;
                 }
                 return false;
             }
         });
     }
+
 
 
     // Methods in which takes the raw week options sxhedule string array
