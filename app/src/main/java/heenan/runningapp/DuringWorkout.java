@@ -343,6 +343,7 @@ public class DuringWorkout extends AppCompatActivity {
                         .setContentText("Walk!");
                 instruction.setText("Walk!");
             }
+            //Pushes the notification to view for the users
             mNotificationManager.notify(mId, mBuilder.build());
 
             //If you have yet to reach the final task, move onto the next task

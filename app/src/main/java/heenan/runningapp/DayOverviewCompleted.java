@@ -14,13 +14,21 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.Arrays;
 
 /**
  * Created by gotal on 4/3/2017.
  */
 
-public class DayOverviewCompleted extends AppCompatActivity {
+public class DayOverviewCompleted extends AppCompatActivity implements OnMapReadyCallback{
 
     //For navigation menu
     private DrawerLayout mDrawerLayout;
@@ -31,6 +39,8 @@ public class DayOverviewCompleted extends AppCompatActivity {
     private double length;
 
     private Location[] locations_array;
+
+    private GoogleMap mMap;
 
 
     @Override
@@ -98,6 +108,15 @@ public class DayOverviewCompleted extends AppCompatActivity {
             text_views[view].setText(display_data[view]);
         }
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        //for(int k = 5; k < day_data.length; k=k+2) {
+            //mMap.addMarker(new MarkerOptions().position(new LatLng(Integer.parseInt(day_data[5]), Integer.parseInt(day_data[5+1]))));
+        //}
+        //LatLng sydney = new LatLng(-34, 151);
+        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
     }
 
     private float[] get_distance_avg_speeds(){
@@ -215,5 +234,21 @@ public class DayOverviewCompleted extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        //Starting Pin
+        mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(day_data[5]), Double.parseDouble(day_data[5+1]))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        //Pins during run/walk
+        for(int k = 7; k < day_data.length-2; k=k+2) {
+            Log.e("K:", ""+k);
+            Log.e("Lat Long:", ""+Double.parseDouble(day_data[k])+"  "+Double.parseDouble(day_data[k+1]));
+            mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(day_data[k]), Double.parseDouble(day_data[k+1]))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+        }
+        //Last Marker
+        mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(day_data[day_data.length-2]), Double.parseDouble(day_data[day_data.length-1]))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
     }
 }
