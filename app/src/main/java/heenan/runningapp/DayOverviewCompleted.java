@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -41,6 +42,9 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
     private Location[] locations_array;
 
     private GoogleMap mMap;
+
+    double latitude;
+    double longitude;
 
 
     @Override
@@ -181,6 +185,8 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
 
             double lat = Location.convert(day_data[index_day_data]);
             double lon = Location.convert(day_data[index_day_data + 1]);
+            latitude = lat;
+            longitude = lon;
 
             locations_toReturn[loc].setLatitude(lat);
             locations_toReturn[loc].setLongitude(lon);
@@ -253,6 +259,10 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
         }
         //Last Marker
         mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(day_data[day_data.length-2]), Double.parseDouble(day_data[day_data.length-1]))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
+        LatLng coordinate = new LatLng(Double.parseDouble(day_data[day_data.length-2]), Double.parseDouble(day_data[day_data.length-1]));
+        CameraUpdate center=CameraUpdateFactory.newLatLng(coordinate);
+        CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
+        mMap.moveCamera(center);
+        mMap.animateCamera(zoom);
     }
 }

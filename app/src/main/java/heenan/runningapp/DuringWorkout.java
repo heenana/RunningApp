@@ -147,9 +147,11 @@ public class DuringWorkout extends AppCompatActivity {
                 switch (id) {
                     case R.id.main_menu:
                         i = new Intent(DuringWorkout.this, MainActivity.class);
+                        vibrateOn = false;
                         startActivity(i);
                         break;
                     case R.id.plan_overview:
+                        vibrateOn = false;
                         goToPlanOverView = true;
                         onBackPressed();
                         break;
@@ -158,6 +160,7 @@ public class DuringWorkout extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         break;
                     case R.id.new_race:
+                        vibrateOn = false;
                         goToNewRace = true;
                         onBackPressed();
                         break;
