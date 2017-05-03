@@ -64,12 +64,14 @@ public class DuringWorkout extends AppCompatActivity {
     int task; //Current task number you are at
     double totalTasks; //Total tasks to be completed (sets * 2) Look here
     int runWalkSwitch; //(run - 0) -- (walk - 1)
+    boolean vibrateOn = true;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_during_workout);
+
 
         //To see navigation bar at top
         mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_during_workout);
@@ -143,6 +145,10 @@ public class DuringWorkout extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 Intent i;
                 switch (id) {
+                    case R.id.main_menu:
+                        i = new Intent(DuringWorkout.this, MainActivity.class);
+                        startActivity(i);
+                        break;
                     case R.id.plan_overview:
                         goToPlanOverView = true;
                         onBackPressed();
@@ -184,27 +190,31 @@ public class DuringWorkout extends AppCompatActivity {
         //If you have yet to reach the final task, move onto the next task
         if (task != totalTasks) {
             time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
-            v.vibrate(1000);
+
             //Create new timer and use time_left
             Timer next_instruction_timer = new Timer(time_left, 1000);
             next_instruction_timer.start();
             //Update the switch so you can correctly access the running or walking time
             if (runWalkSwitch == 0) {
                 runWalkSwitch = 1; //Walk
+                if (vibrateOn)
+                    v.vibrate(1000);
             } else {
                 runWalkSwitch = 0; //Run
+                if (vibrateOn)
+                    v.vibrate(1000);
             }
 
             Log.e("GPS ENABLES?", "ABOUT TO CHECK");
             if (gps.canGetLocation()) {
-                Log.e("GPS IS ENABLED", "Thank God");
-
+                Log.e("GPS IS ENABLED", "Thank you God");
+                gps.getLocation();
                 double latitude = gps.getLatitude(); // returns latitude
                 double longitude = gps.getLongitude(); // returns longitude
+                Log.e("My lat", ""+latitude);
+                Log.e("My long", ""+longitude);
 
                 queried_gps_locations.add(new double[]{latitude, longitude});
-
-
             } // gps enabled} // return boolean true/false
             task = task + 1;
         }
@@ -218,6 +228,7 @@ public class DuringWorkout extends AppCompatActivity {
         alertDialog.setNegativeButton("Yes, I'm a wimp..", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                vibrateOn = false;
                 //moveTaskToBack(true);
                 if (goToPlanOverView) {
                     goToPlanOverView = false;
@@ -243,6 +254,7 @@ public class DuringWorkout extends AppCompatActivity {
                             | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 } else {
+                    vibrateOn = false;
                     finish();
                 }
             }
@@ -285,6 +297,7 @@ public class DuringWorkout extends AppCompatActivity {
 
         @Override
         public void onFinish() {
+            vibrateOn = false;
             timer_views[2].setText("Done! You did a great job today!");
         }
     }
@@ -336,12 +349,16 @@ public class DuringWorkout extends AppCompatActivity {
                         .setContentTitle("Instruction")
                         .setContentText("Run!");
                 instruction.setText("Run!");
+                if (vibrateOn)
+                    v.vibrate(1000);
             } else {
                 mBuilder = new NotificationCompat.Builder(DuringWorkout.this)
                         .setSmallIcon(R.drawable.default_map)
                         .setContentTitle("Instruction")
                         .setContentText("Walk!");
                 instruction.setText("Walk!");
+                if (vibrateOn)
+                    v.vibrate(1000);
             }
             //Pushes the notification to view for the users
             mNotificationManager.notify(mId, mBuilder.build());
@@ -349,7 +366,7 @@ public class DuringWorkout extends AppCompatActivity {
             //If you have yet to reach the final task, move onto the next task
             if (task != totalTasks) {
                 time_left = (long) ((day_data[3 + runWalkSwitch] * 60000));
-                v.vibrate(1000);
+                //v.vibrate(1000);
                 //Create new timer and use time_left
                 Timer next_instruction_timer = new Timer(time_left, 1000);
                 next_instruction_timer.start();
@@ -362,7 +379,7 @@ public class DuringWorkout extends AppCompatActivity {
 
                 if (gps.canGetLocation()) {
                     Log.e("GPS IS ENABLED", "Thank God");
-
+                    gps.getLocation();
                     double latitude = gps.getLatitude(); // returns latitude
                     double longitude = gps.getLongitude(); // returns longitude
 
@@ -373,8 +390,8 @@ public class DuringWorkout extends AppCompatActivity {
 
                 task = task + 1;
             } else {
+                vibrateOn = false;
                 timer_views[0].setText("Done! You did a great job today!");
-
                 Intent returnIntent = new Intent();
 
                 returnIntent.putExtra("result", 1);
@@ -392,7 +409,6 @@ public class DuringWorkout extends AppCompatActivity {
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
-            v.cancel();
         }
     }
 
