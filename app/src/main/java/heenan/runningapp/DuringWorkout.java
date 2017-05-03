@@ -1,8 +1,8 @@
 package heenan.runningapp;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
+//import android.app.Notification;
+//import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,7 +17,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.NotificationCompat;
+//import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -146,14 +146,17 @@ public class DuringWorkout extends AppCompatActivity {
                 Intent i;
                 switch (id) {
                     case R.id.main_menu:
+                        vibrateOn = false;
                         i = new Intent(DuringWorkout.this, MainActivity.class);
                         startActivity(i);
                         break;
                     case R.id.plan_overview:
+                        vibrateOn = false;
                         goToPlanOverView = true;
                         onBackPressed();
                         break;
                     case R.id.next_workout:
+                        vibrateOn = false;
                         Toast.makeText(DuringWorkout.this, "Currently training for latest workout", Toast.LENGTH_SHORT).show();
                         mDrawerLayout.closeDrawers();
                         break;
@@ -337,31 +340,31 @@ public class DuringWorkout extends AppCompatActivity {
             Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             TextView instruction = (TextView) findViewById(R.id.current_instruction);
 
-            NotificationManager mNotificationManager;
-            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationCompat.Builder mBuilder;
-            int mId = 1;
+            //NotificationManager mNotificationManager;
+            //mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            //NotificationCompat.Builder mBuilder;
+           // int mId = 1;
 
             //Set the current instruction
             if (runWalkSwitch == 0) {
-                mBuilder = new NotificationCompat.Builder(DuringWorkout.this)
-                        .setSmallIcon(R.drawable.default_map)
-                        .setContentTitle("Instruction")
-                        .setContentText("Run!");
+               // mBuilder = new NotificationCompat.Builder(DuringWorkout.this)
+                 //       .setSmallIcon(R.drawable.default_map)
+                   //     .setContentTitle("Instruction")
+                     //   .setContentText("Run!");
                 instruction.setText("Run!");
                 if (vibrateOn)
                     v.vibrate(1000);
             } else {
-                mBuilder = new NotificationCompat.Builder(DuringWorkout.this)
-                        .setSmallIcon(R.drawable.default_map)
-                        .setContentTitle("Instruction")
-                        .setContentText("Walk!");
+                //mBuilder = new NotificationCompat.Builder(DuringWorkout.this)
+                  //      .setSmallIcon(R.drawable.default_map)
+                    //    .setContentTitle("Instruction")
+                      //  .setContentText("Walk!");
                 instruction.setText("Walk!");
                 if (vibrateOn)
                     v.vibrate(1000);
             }
             //Pushes the notification to view for the users
-            mNotificationManager.notify(mId, mBuilder.build());
+            //mNotificationManager.notify(mId, mBuilder.build());
 
             //If you have yet to reach the final task, move onto the next task
             if (task != totalTasks) {

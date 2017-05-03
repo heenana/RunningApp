@@ -23,35 +23,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/race_5k"
-            android:layout_weight="0.1" />
+            android:layout_weight="0.1"
+            android:backgroundTint="@color/buttonColor"/>
 
         <Button
             android:id="@+id/chose_10k"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/race_10k"
-            android:layout_weight="0.1"/>
+            android:layout_weight="0.1"
+            android:backgroundTint="@color/buttonColor"/>
 
         <Button
             android:id="@+id/chose_15k"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/race_15k"
-            android:layout_weight="0.1"/>
+            android:layout_weight="0.1"
+            android:backgroundTint="@color/buttonColor"/>
 
         <Button
             android:id="@+id/chose_halfmarathon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/race_halfmarathon"
-            android:layout_weight="0.1"/>
+            android:layout_weight="0.1"
+            android:backgroundTint="@color/buttonColor"/>
 
         <Button
             android:id="@+id/chose_marathon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/race_marathon"
-            android:layout_weight="0.1"/>
+            android:layout_weight="0.1"
+            android:backgroundTint="@color/buttonColor"/>
 
     </LinearLayout>
 

@@ -76,9 +76,16 @@ public class DayOverview extends AppCompatActivity {
         TextView sets_num = (TextView) findViewById(R.id.sets);
         TextView total_length = (TextView) findViewById(R.id.length);
 
-
-        running.setText("Run: " + run + " minutes");
-        walking.setText("Walk: " + walk + " minutes");
+        if (Integer.parseInt(run) == 1) {
+            running.setText("Run: " + run + " minute");
+        } else {
+            running.setText("Run: " + run + " minutes");
+        }
+        if (Integer.parseInt(walk) == 1) {
+            walking.setText("Walk: " + walk + " minute");
+        } else {
+            walking.setText("Walk: " + walk + " minutes");
+        }
         sets_num.setText("Sets: " + sets);
         total_length.setText("Total Workout Time: " + (int) length + " minutes");
 

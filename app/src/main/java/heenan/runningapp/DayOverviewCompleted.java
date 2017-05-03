@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,7 +29,7 @@ import java.util.Arrays;
  * Created by gotal on 4/3/2017.
  */
 
-public class DayOverviewCompleted extends AppCompatActivity implements OnMapReadyCallback{
+public class DayOverviewCompleted extends AppCompatActivity implements OnMapReadyCallback {
 
     //For navigation menu
     private DrawerLayout mDrawerLayout;
@@ -70,18 +71,17 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
         String avg_rs = "N/A";
 
 
-
         Log.e("INSIDE DOC", "GOT DAY_DATA");
-        Log.e("Day Data Lenght", ""+day_data.length);
+        Log.e("Day Data Lenght", "" + day_data.length);
         Log.e("DD contents", Arrays.toString(day_data));
 
         length = (Double.parseDouble(walk) + Double.parseDouble(run)) * Double.parseDouble(sets);
 
         setTitle(getString(R.string.day_overview_title) + " " + day_number + ": " + completed);
-        int[] textview_ids = new int[] {R.id.run, R.id.walk, R.id.sets, R.id.length, R.id.distance, R.id.avg_walking_speed, R.id.avg_running_speed};
+        int[] textview_ids = new int[]{R.id.run, R.id.walk, R.id.sets, R.id.length, R.id.distance, R.id.avg_walking_speed, R.id.avg_running_speed};
 
 
-        if(day_data.length > 5) {
+        if (day_data.length > 5) {
 
             locations_array = dd_toLocations();
 
@@ -94,17 +94,17 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
         }
 
 
-        String[] display_data = new String[] {"Run: "+run+" minutes", "Walk: "+walk+ "minutes",
-                                "Sets: "+sets, "Total Workout Time: "+(int) length + "minutes",
-                                "Distance: "+distance+" m", "Avg. Walking Speed: "+avg_ws +" m/s",
-                                "Avg. Running Speed: "+avg_rs +" m/s"};
+        String[] display_data = new String[]{"Run: " + run + " minutes", "Walk: " + walk + " minutes",
+                "Sets: " + sets, "Total Workout Time: " + (int) length + " minutes",
+                "Distance: " + distance + " m", "Avg. Walking Speed: " + avg_ws + " m/s",
+                "Avg. Running Speed: " + avg_rs + " m/s"};
 
         TextView[] text_views = new TextView[textview_ids.length];
 
-        for(int view = 0; view < textview_ids.length; view++){
-            text_views[view] = (TextView)findViewById(textview_ids[view]);
-            Log.e("MY VALUE IS", ""+view);
-            Log.e(""+display_data.length, ""+text_views.length);
+        for (int view = 0; view < textview_ids.length; view++) {
+            text_views[view] = (TextView) findViewById(textview_ids[view]);
+            Log.e("MY VALUE IS", "" + view);
+            Log.e("" + display_data.length, "" + text_views.length);
             text_views[view].setText(display_data[view]);
         }
 
@@ -113,15 +113,15 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
         mapFragment.getMapAsync(this);
 
         //for(int k = 5; k < day_data.length; k=k+2) {
-            //mMap.addMarker(new MarkerOptions().position(new LatLng(Integer.parseInt(day_data[5]), Integer.parseInt(day_data[5+1]))));
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(Integer.parseInt(day_data[5]), Integer.parseInt(day_data[5+1]))));
         //}
         //LatLng sydney = new LatLng(-34, 151);
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
     }
 
-    private float[] get_distance_avg_speeds(){
+    private float[] get_distance_avg_speeds() {
 
-        float[] distances = new float[locations_array.length -1];
+        float[] distances = new float[locations_array.length - 1];
 
         // the avg speeds are in meters per second!
         float[] to_return = new float[3]; // [distance, avg_running_speed, avg_walking_speed]
@@ -130,15 +130,15 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
         float avg_ws = 0;
         float avg_rs = 0;
 
-        for(int loc = 0; loc < locations_array.length - 1; loc++){
+        for (int loc = 0; loc < locations_array.length - 1; loc++) {
 
             float distance = locations_array[loc].distanceTo(locations_array[loc + 1]);
 
 
-            Log.e("Loc "+loc+"distance", ""+distances[loc]);
+            Log.e("Loc " + loc + "distance", "" + distances[loc]);
 
             distances[loc] = distance;
-            if(loc % 2 == 0){
+            if (loc % 2 == 0) {
                 avg_rs += distance;
             } else {
                 avg_ws += distance;
@@ -147,7 +147,7 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
             total += distance;
         }
 
-        Log.e("total", ""+total);
+        Log.e("total", "" + total);
 
         // avg running speed = total_running_distance / (num_sets * running_mins_per set * 60) = total_running_distance / total_running_secs
         avg_rs /= (Float.parseFloat(day_data[2]) * Float.parseFloat(day_data[3]) * 60);
@@ -163,19 +163,17 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
     }
 
 
+    private Location[] dd_toLocations() {
 
+        Location[] locations_toReturn = new Location[(day_data.length - 5) / 2];
 
-    private Location[] dd_toLocations(){
-
-        Location[] locations_toReturn = new Location[(day_data.length - 5) /2];
-
-        Log.e("locations_toReturn size", ""+locations_toReturn.length);
-        Log.e("day_data size", ""+day_data.length);
+        Log.e("locations_toReturn size", "" + locations_toReturn.length);
+        Log.e("day_data size", "" + day_data.length);
 
         int index_day_data = 5;
 
-        for(int loc = 0; loc < locations_toReturn.length; loc++){
-            Log.e("LOC is"+loc, "IndexDD is "+index_day_data);
+        for (int loc = 0; loc < locations_toReturn.length; loc++) {
+            Log.e("LOC is" + loc, "IndexDD is " + index_day_data);
 
             locations_toReturn[loc] = new Location("");
 
@@ -187,8 +185,8 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
 
             index_day_data += 2;
 
-            Log.e("LOC "+loc+" Lat", Double.toString(locations_toReturn[loc].getLatitude()));
-            Log.e("LOC "+loc+" Lon", Double.toString(locations_toReturn[loc].getLongitude()));
+            Log.e("LOC " + loc + " Lat", Double.toString(locations_toReturn[loc].getLatitude()));
+            Log.e("LOC " + loc + " Lon", Double.toString(locations_toReturn[loc].getLongitude()));
         }
 
         return locations_toReturn;
@@ -221,7 +219,7 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
                     case R.id.plan_overview:
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("result", 1);
-                        setResult(Activity.RESULT_OK,returnIntent);
+                        setResult(Activity.RESULT_OK, returnIntent);
                         finish();
                         break;
                     case R.id.next_workout:
@@ -244,15 +242,20 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         //Starting Pin
-        mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(day_data[5]), Double.parseDouble(day_data[5+1]))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(day_data[5]), Double.parseDouble(day_data[5 + 1]))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         //Pins during run/walk
-        for(int k = 7; k < day_data.length-2; k=k+2) {
-            Log.e("K:", ""+k);
-            Log.e("Lat Long:", ""+Double.parseDouble(day_data[k])+"  "+Double.parseDouble(day_data[k+1]));
-            mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(day_data[k]), Double.parseDouble(day_data[k+1]))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+        for (int k = 7; k < day_data.length - 2; k = k + 2) {
+            Log.e("K:", "" + k);
+            Log.e("Lat Long:", "" + Double.parseDouble(day_data[k]) + "  " + Double.parseDouble(day_data[k + 1]));
+            mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(day_data[k]), Double.parseDouble(day_data[k + 1]))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         }
         //Last Marker
-        mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(day_data[day_data.length-2]), Double.parseDouble(day_data[day_data.length-1]))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(day_data[day_data.length - 2]), Double.parseDouble(day_data[day_data.length - 1]))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
+        LatLng coordinate = new LatLng(Double.parseDouble(day_data[day_data.length - 2]), Double.parseDouble(day_data[day_data.length - 1]));
+        CameraUpdate center = CameraUpdateFactory.newLatLng(coordinate);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+        mMap.moveCamera(center);
+        mMap.animateCamera(zoom);
     }
 }
