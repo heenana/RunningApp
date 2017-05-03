@@ -214,6 +214,10 @@ public class DayOverviewCompleted extends AppCompatActivity implements OnMapRead
                 int id = menuItem.getItemId();
                 Intent i;
                 switch (id) {
+                    case R.id.main_menu:
+                        i = new Intent(DayOverviewCompleted.this, MainActivity.class);
+                        startActivity(i);
+                        break;
                     case R.id.plan_overview:
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("result", 1);

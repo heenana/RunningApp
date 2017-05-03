@@ -200,6 +200,10 @@ public class MainActivity extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 Intent i;
                 switch (id) {
+                    case R.id.main_menu:
+                        i = new Intent(MainActivity.this, MainActivity.class);
+                        startActivity(i);
+                        break;
                     case R.id.plan_overview:
                         i = new Intent(MainActivity.this, MainActivity.class);
                         startActivity(i);

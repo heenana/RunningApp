@@ -134,6 +134,10 @@ public class PlanOverview extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 Intent i;
                 switch (id) {
+                    case R.id.main_menu:
+                        i = new Intent(PlanOverview.this, MainActivity.class);
+                        startActivity(i);
+                        break;
                     case R.id.plan_overview:
                         Toast.makeText(PlanOverview.this, "Currently Viewing Plan Overview", Toast.LENGTH_SHORT).show();
                         mDrawerLayout.closeDrawers();

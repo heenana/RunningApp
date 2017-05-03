@@ -138,6 +138,10 @@ public class CustomizePlan extends AppCompatActivity {
                         i = new Intent(CustomizePlan.this, MainActivity.class);
                         startActivity(i);
                         break;
+                    case R.id.main_menu:
+                        i = new Intent(CustomizePlan.this, MainActivity.class);
+                        startActivity(i);
+                        break;
                     case R.id.new_race:
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("result", 1);

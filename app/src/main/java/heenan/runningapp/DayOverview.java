@@ -123,6 +123,10 @@ public class DayOverview extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 Intent i;
                 switch (id) {
+                    case R.id.main_menu:
+                        i = new Intent(DayOverview.this, MainActivity.class);
+                        startActivity(i);
+                        break;
                     case R.id.plan_overview:
                         Bundle b = new Bundle();
                         Intent intent = new Intent(DayOverview.this, PlanOverview.class);
