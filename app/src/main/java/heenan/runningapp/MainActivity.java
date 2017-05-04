@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                     if (day_number == 0) {
                         day_data = get_day_plans[1];
                     } else {
-                        day_data = get_day_plans[day_number];
+                        day_data = get_day_plans[day_number+1];
                     }
                     String completed = "To-Do";
                     boolean fromPlanOverview = false;

@@ -164,14 +164,15 @@ public class PlanOverview extends AppCompatActivity {
         String[] initial_arr = get_plan.split(";");
         String[] get_day_plans = get_plan.split("\\(");
         int day_number = Integer.parseInt(initial_arr[3]);
+        Log.e("what is the day numner", ""+day_number);
         String day_data;
         if (day_number == 0) {
             day_data = get_day_plans[1];
         } else {
-            day_data = get_day_plans[day_number];
+            day_data = get_day_plans[day_number+1];
         }
         String completed = "To-Do";
-        boolean fromPlanOverview = false;
+        boolean fromPlanOverview = true;
         Bundle bundle = new Bundle();
         Intent intent = new Intent(PlanOverview.this, DayOverview.class);
         bundle.putBoolean("fromPlanOverview", fromPlanOverview);
@@ -182,6 +183,7 @@ public class PlanOverview extends AppCompatActivity {
         Log.e("completed", completed);
         Log.e("day_number", "" + day_number);
         Log.e("day_data", day_data);
+        Log.e("day_data_next",get_day_plans[day_number+1] );
         intent.putExtras(bundle);
         startActivityForResult(intent, 1);
 

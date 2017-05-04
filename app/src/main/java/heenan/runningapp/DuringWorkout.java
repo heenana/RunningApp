@@ -57,6 +57,7 @@ public class DuringWorkout extends AppCompatActivity {
     boolean goToPlanOverView = false;
     boolean goToNewRace = false;
     private boolean fromPlanOverview;
+    private boolean goToMainMenu;
     private String race_name = "Do no need";
 
     //Variables that are used with the timer
@@ -64,6 +65,7 @@ public class DuringWorkout extends AppCompatActivity {
     int task; //Current task number you are at
     double totalTasks; //Total tasks to be completed (sets * 2) Look here
     int runWalkSwitch; //(run - 0) -- (walk - 1)
+
     boolean vibrateOn = true;
 
 
@@ -93,7 +95,8 @@ public class DuringWorkout extends AppCompatActivity {
         day_data = new double[5];
 
         for (int i = 0; i < 5; i++) {
-            day_data[i] = Double.parseDouble(temp_arr[i]);
+
+            day_data[i] = Double.parseDouble(temp_arr[i].substring(0, 1));
         }
 
         length = b.getDouble("length");
@@ -143,12 +146,14 @@ public class DuringWorkout extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                Intent i;
+                //Intent i;
                 switch (id) {
                     case R.id.main_menu:
                         vibrateOn = false;
-                        i = new Intent(DuringWorkout.this, MainActivity.class);
-                        startActivity(i);
+                        goToMainMenu = true;
+                        onBackPressed();
+                        //i = new Intent(DuringWorkout.this, MainActivity.class);
+                        //startActivity(i);
                         break;
                     case R.id.plan_overview:
                         vibrateOn = false;
@@ -214,8 +219,8 @@ public class DuringWorkout extends AppCompatActivity {
                 gps.getLocation();
                 double latitude = gps.getLatitude(); // returns latitude
                 double longitude = gps.getLongitude(); // returns longitude
-                Log.e("My lat", ""+latitude);
-                Log.e("My long", ""+longitude);
+                Log.e("My lat", "" + latitude);
+                Log.e("My long", "" + longitude);
 
                 queried_gps_locations.add(new double[]{latitude, longitude});
             } // gps enabled} // return boolean true/false
@@ -249,6 +254,9 @@ public class DuringWorkout extends AppCompatActivity {
                         intent_.putExtras(b_);
                         startActivity(intent_);
                     }
+                } else if (goToMainMenu) {
+                    Intent i = new Intent(DuringWorkout.this, MainActivity.class);
+                    startActivity(i);
                 } else if (goToNewRace) {
                     goToNewRace = false;
                     Intent intent = new Intent(DuringWorkout.this,
@@ -343,22 +351,22 @@ public class DuringWorkout extends AppCompatActivity {
             //NotificationManager mNotificationManager;
             //mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             //NotificationCompat.Builder mBuilder;
-           // int mId = 1;
+            // int mId = 1;
 
             //Set the current instruction
             if (runWalkSwitch == 0) {
-               // mBuilder = new NotificationCompat.Builder(DuringWorkout.this)
-                 //       .setSmallIcon(R.drawable.default_map)
-                   //     .setContentTitle("Instruction")
-                     //   .setContentText("Run!");
+                // mBuilder = new NotificationCompat.Builder(DuringWorkout.this)
+                //       .setSmallIcon(R.drawable.default_map)
+                //     .setContentTitle("Instruction")
+                //   .setContentText("Run!");
                 instruction.setText("Run!");
                 if (vibrateOn)
                     v.vibrate(1000);
             } else {
                 //mBuilder = new NotificationCompat.Builder(DuringWorkout.this)
-                  //      .setSmallIcon(R.drawable.default_map)
-                    //    .setContentTitle("Instruction")
-                      //  .setContentText("Walk!");
+                //      .setSmallIcon(R.drawable.default_map)
+                //    .setContentTitle("Instruction")
+                //  .setContentText("Walk!");
                 instruction.setText("Walk!");
                 if (vibrateOn)
                     v.vibrate(1000);
